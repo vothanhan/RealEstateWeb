@@ -1,7 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "myapp"
+    "name": "myapp",
+    "ejected": false
   },
   "apps": [
     {
@@ -21,7 +22,12 @@
       "styles": [
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "assets/plotly-latest.min.js",
+        "assets/hcmHigh.js",
+        "assets/latinise.min.js",
+        "assets/science.min.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
@@ -52,6 +58,7 @@
   },
   "defaults": {
     "styleExt": "css",
-    "component": {}
+    "component": {
+    }
   }
 }

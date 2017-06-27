@@ -1,0 +1,20 @@
+<div>
+    <select id='graphMenu' [(ngModel)] = "graphType" (change)='graphChange()'>
+        <option value=''>Select graph type</option>
+        <option value='itemDensity'>Listings distribution (Heat map)</option>
+        <option value='itemDensityGraph'>Listings distribution (Bar chart)</option>
+        <option value = 'priceDistribute'>Price distribution</option>
+        <option value = 'priceProb'>Density Probability</option>
+        <!-- <option value = 'priceAverage' > Map of average price </option> -->
+        <option value = 'meanPrice'> Graph of average price </option>
+        <option value = "boxPlotPrice"> Box Plot of price </option>
+        <option value = 'postPerDay'> Broker's usage trend </option>
+        <option value = 'hTypePercent'> Percentage of each type of house</option>
+        <option value = "priceTrend">Price trend </option>
+        <option value = "priceScatter">Price's scatter plot</option>
+    </select>
+    <dropdown-menu></dropdown-menu>
+    <button appRemoveChart [clearID]="'chartdiv'" (click) = "processButton()" [disabled]='(!processActive && !menuComponent.hasChanged)'>Click me!</button>
+
+    <div id="chartdiv" [ngClass]="{'isLong':isLong}"></div>
+</div>

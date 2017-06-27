@@ -1,0 +1,8 @@
+#chartdiv {
+  width: 100%;
+  height: 700px;
+}
+
+#chartdiv.isLong{
+    height:1000px;
+} 
