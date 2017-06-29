@@ -12,9 +12,10 @@
         <option value = 'hTypePercent'> Percentage of each type of house</option>
         <option value = "priceTrend">Price trend </option>
         <option value = "priceScatter">Price's scatter plot</option>
+        <option value = "predictPrice">Predict Price</option>
     </select>
     <dropdown-menu></dropdown-menu>
     <button appRemoveChart [clearID]="'chartdiv'" (click) = "processButton()" [disabled]='(!processActive && !menuComponent.hasChanged)'>Click me!</button>
 
-    <div id="chartdiv" [ngClass]="{'isLong':isLong}"></div>
+    <div id="chartdiv" [ngClass]="{'isLong':isLong}" *ngIf="isNotPredict"></div>
 </div>

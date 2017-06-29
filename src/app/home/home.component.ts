@@ -82,11 +82,12 @@ export class HomeComponent implements OnInit {
     "itemDensity": 2,
     "priceAverage":1,
     "meanPrice": 1,
-    "postPerDay": 3,
+    "postPerDay": 0,
     "hTypePercent":0,
     "priceTrend":0,
     "boxPlotPrice":1,
-    "priceScatter":0
+    "priceScatter":0,
+    "predictPrice":0,
   }
 
   isLong : boolean;
@@ -94,6 +95,7 @@ export class HomeComponent implements OnInit {
   mapObject : any;
   isRender : boolean = false;
   processActive : boolean = true;
+  isNotPredict : boolean = true;
 
   @ViewChild(DropdownMenuComponent)
 
@@ -114,10 +116,8 @@ export class HomeComponent implements OnInit {
     this.processActive=false;
     if (this.graphType == 'priceDistribute' || this.graphType == 'priceProb'){
       this.drawDistributeGraph();
-      this.menuComponent.setLevel(0);  //set level to remove unnecessary dropdown menu
     }
     else if (this.graphType == 'itemDensity' || this.graphType == "itemDensityGraph"){
-      this.drawMap(true);
       this.drawItemCountGraph();  
     }
     else if (this.graphType == 'priceAverage' ){
@@ -152,14 +152,20 @@ export class HomeComponent implements OnInit {
 
   graphChange (){
     this.processActive=true;
+    this.isNotPredict= this.graphType != "predictPrice";
     this.menuComponent.setLevel(this.graphLevel[this.graphType]);
-    if(this.graphType == 'postPerDay' || this.graphType == 'hTypePercent'){
+    if(this.graphType == 'hTypePercent'){
       this.menuComponent.haveHType = false;
     }
     else{
       this.menuComponent.haveHType = true;
     }
+    if(this.graphType == 'priceTrend'){
+      this.menuComponent.hasDateStep=true;
+    }
+    else this.menuComponent.hasDateStep=false;
   }
+
 
   drawItemCountGraph () {
     let vm=this;
@@ -167,7 +173,7 @@ export class HomeComponent implements OnInit {
     let dataProviders = { };
     let mapName = '';
     if (vm.graphType == 'itemDensityGraph'){
-      this.houseService.getHouse(this.menuComponent.htype, this.menuComponent.province, this.menuComponent.county, '', this.menuComponent.transType, 5)
+      this.houseService.getHouse(this.menuComponent.htype, this.menuComponent.province, this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 5)
       .subscribe( res => {
         let dataProvider=res['data'];
         dataProvider.forEach((item) => {
@@ -225,7 +231,7 @@ export class HomeComponent implements OnInit {
         province = "ho chi minh";
         dataProviders=vm.hcmDataProviders;
       }
-      this.houseService.getHouse(this.menuComponent.htype, province, this.menuComponent.county, '', this.menuComponent.transType, 5)
+      this.houseService.getHouse(this.menuComponent.htype, province, this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 5)
       .subscribe( res => {
         if(res['err']==true){
           return
@@ -249,7 +255,6 @@ export class HomeComponent implements OnInit {
           dataProviders['images']=[];
         }
         this.map.dataProvider=dataProviders;
-        console.log(dataProviders);
         this.map.validateNow();
       });
     }
@@ -272,10 +277,9 @@ export class HomeComponent implements OnInit {
     }
 
     
-    this.houseService.getHouse(this.menuComponent.htype, province, "", '', this.menuComponent.transType, 2)
+    this.houseService.getHouse(this.menuComponent.htype, province, "", '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 2)
       .subscribe( res => {
         if (res['err']==true){
-          console.log(res['data']);
           return;
         }
         else{
@@ -353,7 +357,7 @@ export class HomeComponent implements OnInit {
 
   drawDistributeGraph(){
     this.houseService.getHouse(this.menuComponent.htype,this.menuComponent.province, this.menuComponent.county, 
-      this.menuComponent.ward, this.menuComponent.transType, 0).subscribe( res => {
+      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 0).subscribe( res => {
         let priceDist : number[] =[];
         let min: number = res['data'].length > 0 ? res['data'][0]['price'] : 0 , max : number = 0;
         for(let i in res['data']){
@@ -412,7 +416,6 @@ export class HomeComponent implements OnInit {
 
 
     let datum = kde(priceDist);
-    console.log(datum);
     let maxYDatum=0
     for(let i=0;i<datum.length;i++){
       maxYDatum = datum[i][1] > maxYDatum ? datum[i][1] : maxYDatum;
@@ -537,7 +540,7 @@ export class HomeComponent implements OnInit {
     let zeroCount=0;
     let vm = this;
 
-    this.houseService.getHouse(this.menuComponent.htype, province, '', '', this.menuComponent.transType, 2)
+    this.houseService.getHouse(this.menuComponent.htype, province, '', '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 2)
           .subscribe( res => {
             if (res['err']==true){
               return;
@@ -634,7 +637,6 @@ export class HomeComponent implements OnInit {
               });
             }
             else if (vm.graphType == "boxPlotPrice"){
-              console.log(dataProvider);
               chart = AmCharts.makeChart( "chartdiv", {
                 "type": "serial",
                 "theme": "light",
@@ -712,111 +714,101 @@ export class HomeComponent implements OnInit {
   }
 
   drawUploadTendency(){
-    let startDate = '01-01-2017';
-    let endDate = '30-05-2017';
-    let currentDate=startDate;
-    let dateList = [{'date':startDate,'value':0}];
-    while(true){
-      currentDate=this.nextDate(currentDate,1);
-      dateList.push({'date':currentDate,'value':0});
-      if(currentDate==endDate){
-        break
+
+    this.houseService.getHouse(this.menuComponent.htype, this.menuComponent.province, this.menuComponent.county, this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 6)
+    .subscribe( res => {
+      if(res['err']==true){
+        return;
       }
-    }
-
-    let count1=0;
-
-    for(let i = 0; i<dateList.length;i++){
-      this.houseService.getPostCount(dateList[i]['date']).subscribe( res => {
-        count1+=1
-        if (res['err']==false){
-          dateList[i]['value']=res['data'];
-        }
-        if(count1==dateList.length){
-          var chart = AmCharts.makeChart("chartdiv", {
-            "type": "serial",
-            "theme": "light",
-            "marginRight": 40,
-            "marginLeft": 40,
-            "autoMarginOffset": 20,
-            "mouseWheelZoomEnabled":true,
-            "dataDateFormat": "DD-MM-YYYY",
-            "valueAxes": [{
-                "id": "v1",
-                "axisAlpha": 0,
-                "position": "left",
-                "ignoreAxisWidth":true,
-                "baseValue":5000
-            }],
-            "balloon": {
-                "borderThickness": 1,
-                "shadowAlpha": 0
-            },
-            "graphs": [{
-                "id": "g1",
-                "balloon":{
-                  "drop":true,
-                  "adjustBorderColor":false,
-                  "color":"#ffffff"
-                },
-                "bullet": "round",
-                "bulletBorderAlpha": 1,
-                "bulletColor": "#FFFFFF",
-                "bulletSize": 5,
-                "hideBulletsCount": 50,
-                "lineThickness": 2,
-                "title": "red line",
-                "useLineColorForBulletBorder": true,
-                "valueField": "value",
-                "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
-            }],
-            "chartScrollbar": {
-                "graph": "g1",
-                "oppositeAxis":false,
-                "offset":30,
-                "scrollbarHeight": 80,
-                "backgroundAlpha": 0,
-                "selectedBackgroundAlpha": 0.1,
-                "selectedBackgroundColor": "#888888",
-                "graphFillAlpha": 0,
-                "graphLineAlpha": 0.5,
-                "selectedGraphFillAlpha": 0,
-                "selectedGraphLineAlpha": 1,
-                "autoGridCount":true,
-                "color":"#AAAAAA"
-            },
-            "chartCursor": {
-                "pan": true,
-                "valueLineEnabled": true,
-                "valueLineBalloonEnabled": true,
-                "cursorAlpha":1,
-                "cursorColor":"#258cbb",
-                "limitToGraph":"g1",
-                "valueLineAlpha":0.2,
-                "valueZoomable":true
-            },
-            "valueScrollbar":{
-              "oppositeAxis":false,
-              "offset":50,
-              "scrollbarHeight":10
-            },
-            "categoryField": "date",
-            "categoryAxis": {
-                "parseDates": true,
-                "dashLength": 1,
-                "minorGridEnabled": true
-            },
-            "export": {
-                "enabled": true
-            },
-            "dataProvider":dateList
-          });
-          chart.addListener("rendered", function(){
-            chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
-          });
-        }
+      let dateList=res['data'];
+      dateList.sort((a,b)=>{
+        let t1=new Date(a['_id']);
+        let t2=new Date(b['_id']);
+        return t1.getTime()-t2.getTime();
       })
-    }
+
+      var chart = AmCharts.makeChart("chartdiv", {
+          "type": "serial",
+          "theme": "light",
+          "marginRight": 40,
+          "marginLeft": 40,
+          "autoMarginOffset": 20,
+          "mouseWheelZoomEnabled":true,
+          "dataDateFormat": "YYYY-MM-DD",
+          "valueAxes": [{
+              "id": "v1",
+              "axisAlpha": 0,
+              "position": "left",
+              "ignoreAxisWidth":true,
+              "baseValue":5000
+          }],
+          "balloon": {
+              "borderThickness": 1,
+              "shadowAlpha": 0
+          },
+          "graphs": [{
+              "id": "g1",
+              "balloon":{
+                "drop":true,
+                "adjustBorderColor":false,
+                "color":"#ffffff"
+              },
+              "bullet": "round",
+              "bulletBorderAlpha": 1,
+              "bulletColor": "#FFFFFF",
+              "bulletSize": 5,
+              "hideBulletsCount": 50,
+              "lineThickness": 2,
+              "title": "red line",
+              "useLineColorForBulletBorder": true,
+              "valueField": "count",
+              "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
+          }],
+          "chartScrollbar": {
+              "graph": "g1",
+              "oppositeAxis":false,
+              "offset":30,
+              "scrollbarHeight": 80,
+              "backgroundAlpha": 0,
+              "selectedBackgroundAlpha": 0.1,
+              "selectedBackgroundColor": "#888888",
+              "graphFillAlpha": 0,
+              "graphLineAlpha": 0.5,
+              "selectedGraphFillAlpha": 0,
+              "selectedGraphLineAlpha": 1,
+              "autoGridCount":true,
+              "color":"#AAAAAA"
+          },
+          "chartCursor": {
+              "pan": true,
+              "valueLineEnabled": true,
+              "valueLineBalloonEnabled": true,
+              "cursorAlpha":1,
+              "cursorColor":"#258cbb",
+              "limitToGraph":"g1",
+              "valueLineAlpha":0.2,
+              "valueZoomable":true
+          },
+          "valueScrollbar":{
+            "oppositeAxis":false,
+            "offset":50,
+            "scrollbarHeight":10
+          },
+          "categoryField": "_id",
+          "categoryAxis": {
+              "parseDates": true,
+              "dashLength": 1,
+              "minorGridEnabled": true
+          },
+          "export": {
+              "enabled": true
+          },
+          "dataProvider":dateList
+      });
+      chart.addListener("rendered", function(){
+        chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
+      });
+    });
   }
 
   nextDate(date,step){
@@ -860,7 +852,7 @@ export class HomeComponent implements OnInit {
 
   drawHouseTypePieChart(){
     this.houseService.getHouse(this.menuComponent.htype, this.menuComponent.province, this.menuComponent.county, 
-      this.menuComponent.ward, this.menuComponent.transType, 3)
+      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 3)
       .subscribe( res =>{
         if(res['err']==true){
           console.log("error");
@@ -926,9 +918,9 @@ export class HomeComponent implements OnInit {
   }
 
   drawTrendOfPrice(){
-    let dateStep=15;
+    let dateStep=this.menuComponent.dateStep;
     this.houseService.getHouse(this.menuComponent.htype,this.menuComponent.province, this.menuComponent.county, 
-      this.menuComponent.ward, this.menuComponent.transType, 4).subscribe( res => {
+      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 4).subscribe( res => {
         let timeData=res['data']
         
         if (res['err']==true){
@@ -941,7 +933,6 @@ export class HomeComponent implements OnInit {
         let showData=[timeData[0]]
         showData[showData.length-1]['dateString']=showData[showData.length-1]['dateString'].split('-').reverse().join("-");
         let date=new Date();
-        let alreadyDivided=true;
         for(var i =0; i< timeData.length; i++){
           date= new Date(timeData[i]['date']);
           if (date.getTime()-nextDate.getTime()<0){
@@ -950,8 +941,6 @@ export class HomeComponent implements OnInit {
             showData[showData.length-1]['list']= showData[showData.length-1]['list'].concat(timeData[i]['list']);
           }
           else{
-            showData[showData.length-1]['total']/=showData[showData.length-1]['count'];
-            console.log(showData[showData.length-1]['date'])
             let quartiles=this.getQuartile(showData[showData.length-1]['list']);
             showData[showData.length-1]['firstQuartile'] = quartiles['fQ'];
             showData[showData.length-1]['thirdQuartile'] = quartiles['tQ'];
@@ -961,12 +950,11 @@ export class HomeComponent implements OnInit {
               showData[showData.length-1]['dateString']=showData[showData.length-1]['dateString'].split('-').reverse().join("-");
             }
             else{
-              alreadyDivided=false;
               let tempDate=new Date(nextDate);
               let tempData=showData[showData.length-1];
               tempDate.setDate(tempDate.getDate() + dateStep);
               while(tempDate.getTime()<date.getTime()) {
-                  showData.push({"date":nextDate,"dateString":nextDate.toISOString().slice(0,10),"total":tempData['total'],"count":tempData['count']});
+                  showData.push({"date":nextDate,"dateString":nextDate.toISOString().slice(0,10),"total":tempData['total'],"count":tempData['count'],"list":tempData['list']});
                   nextDate=new Date(tempDate);
                   tempDate.setDate(tempDate.getDate() + dateStep);
               }
@@ -975,7 +963,17 @@ export class HomeComponent implements OnInit {
             nextDate.setDate(nextDate.getDate()+dateStep);
           }
         }
-        showData[showData.length-1]['total']/=showData[showData.length-1]['count'];
+        let quartiles=this.getQuartile(showData[showData.length-1]['list']);
+        showData[showData.length-1]['firstQuartile'] = quartiles['fQ'];
+        showData[showData.length-1]['thirdQuartile'] = quartiles['tQ'];
+        showData[showData.length-1]['median'] = quartiles['median'];
+        showData.forEach(item =>{
+          let sum=0;
+          item["list"].forEach( val =>{
+            sum+=val;
+          })
+          item['total']=sum/item['list'].length;
+        })
         var chart = AmCharts.makeChart("chartdiv", {
           "type": "serial",
           "theme": "light",
@@ -1126,12 +1124,11 @@ export class HomeComponent implements OnInit {
 
   drawScatterPrice(){
     this.houseService.getHouse(this.menuComponent.htype,this.menuComponent.province, this.menuComponent.county, 
-      this.menuComponent.ward, this.menuComponent.transType, 0).subscribe( res => {
+      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 0).subscribe( res => {
         if(res['err']==true){
           return;
         }
         else{
-          console.log(res['data']);
           // for(var i =0 ;i<res['data'].length;i++){
           //   res['data'][i]['price']*=res['data'][i]['area'];
           // }
@@ -1180,4 +1177,5 @@ export class HomeComponent implements OnInit {
         }
       });
   }
+
 }

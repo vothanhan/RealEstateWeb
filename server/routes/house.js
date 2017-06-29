@@ -35,6 +35,12 @@ router.get('/', (req,res) => {
     if(params.transtype!='' && params.transtype!=undefined ){
         query.where('transaction-type').equals(params.transtype);
     }
+    if(params.startDate!='' && params.startDate != undefined){
+        query.where("post-time.date").gte(new Date(params.startDate));
+    }
+    if(params.endDate!='' && params.endDate != undefined){
+        query.where("post-time.date").lte(new Date(params.endDate));
+    }
     query.select('price area');
     query.exec((err,houses) => {
         response={}
@@ -74,6 +80,12 @@ router.get('/count', (req,res) => {
     if(params.transtype!='' && params.transtype!=undefined ){
         query.where('transaction-type').equals(params.transtype);
     }
+    if(params.startDate!='' && params.startDate != undefined){
+        query.where("post-time.date").gte(new Date(params.startDate));
+    }
+    if(params.endDate!='' && params.endDate != undefined){
+        query.where("post-time.date").lte(new Date(params.endDate));
+    }
     query.exec((err,count) => {
         response={}
         if (err){
@@ -103,6 +115,20 @@ router.get("/aggregate",(req, res) =>{
     if (params.htype!=undefined && params.htype!=''){
         query.push({"$match":{"house-type":params.htype}});
     }
+    matchDate={};
+    hasDate=false;
+    if(params.startDate!='' && params.startDate != undefined){
+        matchDate['$gte']=new Date(params.startDate);
+        hasDate=true;
+    }
+    if(params.endDate!='' && params.endDate != undefined){
+        matchDate['$lte']=new Date(params.endDate);
+        hasDate=true;
+    }
+    if (hasDate==true){
+        query.push({"$match":{"post-time.date":matchDate}});
+    }
+
     if(params.transtype!='' && params.transtype!=undefined ){
         
         query.push({"$match":{"transaction-type":params.transtype}});
@@ -129,6 +155,12 @@ router.get("/htypepercent", (req, res) =>{
                 query.where('location.ward').equals(params.ward);
             }
         }
+    }
+    if(params.startDate!='' && params.startDate != undefined){
+        query.where("post-time.date").gte(new Date(params.startDate));
+    }
+    if(params.endDate!='' && params.endDate != undefined){
+        query.where("post-time.date").lte(new Date(params.endDate));
     }
     if(params.transtype!='' && params.transtype!=undefined ){
         query.where('transaction-type').equals(params.transtype);
@@ -163,22 +195,44 @@ router.get("/htypepercent", (req, res) =>{
 })
 
 router.get('/countpost',(req,res) => {
-    date = req.query.date;
-
-    date = date.split("-").map( x => { return parseInt(x)});
-    query = House.count({"post-time.date":new Date(Date.UTC(date[2],date[1]-1,date[0]))});
-    query.exec((err,count) =>{
-        response={};
-        if (err){
-            console.log(err);
-            response={err:true,data:err}
-            res.json(response);
+    params= req.query;
+    query=[];
+    groupBy="$post-time.date";
+    if(params.province!='' && params.province!=undefined){
+        query.push({"$match":{"location.province":params.province}});
+        if(params.county!='' && params.county!= undefined ){
+            query.push({"$match":{"location.county":params.county}});
+        }
+    }
+    if (params.htype!=undefined && params.htype!=''){
+        query.push({"$match":{"house-type":params.htype}});
+    }
+    matchDate={};
+    hasDate=false;
+    if(params.startDate!='' && params.startDate != undefined){
+        matchDate['$gte']=new Date(params.startDate);
+        hasDate=true;
+    }
+    if(params.endDate!='' && params.endDate != undefined){
+        matchDate['$lte']=new Date(params.endDate);
+        hasDate=true;
+    }
+    if (hasDate==true){
+        query.push({"$match":{"post-time.date":matchDate}});
+    }
+    if(params.transtype!='' && params.transtype!=undefined ){
+        query.push({"$match":{"transaction-type":params.transtype}});
+    }
+    query.push({"$group":{"_id":groupBy,"count": {"$sum": 1}}});
+    House.aggregate(query,(err,house) => {
+        if(err){
+            res.json({"err":true,"data":err});
         }
         else{
-            response={err:false,data:count}
-            res.json(response);
+
+            res.json({"err":false,"data":house});
         }
-    })
+    });
 
 })
 
@@ -196,6 +250,12 @@ router.get('/trendprice', (req,res) => {
                 query.where('location.ward').equals(params.ward);
             }
         }
+    }
+    if(params.startDate!='' && params.startDate != undefined){
+        query.where("post-time.date").gte(new Date(params.startDate));
+    }
+    if(params.endDate!='' && params.endDate != undefined){
+        query.where("post-time.date").lte(new Date(params.endDate));
     }
     if(params.transtype!='' && params.transtype!=undefined ){
         query.where('transaction-type').equals(params.transtype);
@@ -260,6 +320,12 @@ router.get('/average', (req,res) => {
         //         query.where('location.ward').equals(params.ward);
         //     }
         // }
+    }
+    if(params.startDate!='' && params.startDate != undefined){
+        query.where("post-time.date").gte(new Date(params.startDate));
+    }
+    if(params.endDate!='' && params.endDate != undefined){
+        query.where("post-time.date").lte(new Date(params.endDate));
     }
     if(params.transtype!='' && params.transtype!=undefined ){
         query.where('transaction-type').equals(params.transtype);

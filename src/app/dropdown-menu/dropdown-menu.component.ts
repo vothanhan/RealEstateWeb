@@ -25,6 +25,8 @@ export class DropdownMenuComponent implements OnInit {
   county      : string = '';
   ward        : string = '';
   htype       : string = '';
+  startDate   : string = '';
+  endDate     : string = '';
   typeCount   : object = {};
   menuLevel   : object = {
     "all"      : 0,
@@ -37,6 +39,8 @@ export class DropdownMenuComponent implements OnInit {
   hasChanged   : boolean = false;
   graphLevel  : number = 0;
   haveHType : boolean = true;
+  dateStep : number=1;
+  hasDateStep : boolean=false;
 
 
   constructor(private menuApiService : MenuApiService, private houseService : HouseService) { 
@@ -67,7 +71,6 @@ export class DropdownMenuComponent implements OnInit {
 
   setLevel(number){
     this.graphLevel = number;
-    console.log(this.graphLevel);
   }
 
   fillMenu(menu){
@@ -144,7 +147,7 @@ export class DropdownMenuComponent implements OnInit {
   }
 
   getCount(htype, province, county, ward, transType, arr, i){
-    this.houseService.getHouse(htype,province, county, ward, transType, 1).subscribe( res => {
+    this.houseService.getHouse(htype,province, county, ward, transType,'','', 1).subscribe( res => {
       if(res['err']==false){
         this.typeCount[arr][i]=res['data'];
       }
