@@ -21,7 +21,11 @@ router.get('/', (req,res) => {
     params= req.query;
     query = House.find();
     if (params.htype!=undefined && params.htype!=''){
-        query.where('house-type').equals(params.htype);
+        var htype=params.htype.split(';');
+        if(htype.length>1){
+            htype.splice(-1,1);
+        }
+        query.where('house-type').in(htype);
     }
     if(params.province!='' && params.province!=undefined){
         query.where('location.province').equals(params.province);
@@ -66,7 +70,11 @@ router.get('/count', (req,res) => {
     params= req.query;
     query = House.count();
     if (params.htype!=undefined && params.htype!=''){
-        query.where('house-type').equals(params.htype);
+        var htype=params.htype.split(';');
+        if(htype.length>1){
+            htype.splice(-1,1);
+        }
+        query.where('house-type').in(htype);
     }
     if(params.province!='' && params.province!=undefined){
         query.where('location.province').equals(params.province);
@@ -113,7 +121,11 @@ router.get("/aggregate",(req, res) =>{
         }
     }
     if (params.htype!=undefined && params.htype!=''){
-        query.push({"$match":{"house-type":params.htype}});
+        var htype=params.htype.split(';');
+        if(htype.length>1){
+            htype.splice(-1,1);
+        }
+        query.push({"$match":{"house-type":{"$in":htype}}});
     }
     matchDate={};
     hasDate=false;
@@ -205,7 +217,11 @@ router.get('/countpost',(req,res) => {
         }
     }
     if (params.htype!=undefined && params.htype!=''){
-        query.push({"$match":{"house-type":params.htype}});
+        var htype=params.htype.split(';');
+        if(htype.length>1){
+            htype.splice(-1,1);
+        }
+        query.push({"$match":{"house-type":{"$in":htype}}});
     }
     matchDate={};
     hasDate=false;
@@ -240,7 +256,11 @@ router.get('/trendprice', (req,res) => {
     params= req.query;
     query = House.find();
     if (params.htype!=undefined && params.htype!=''){
-        query.where('house-type').equals(params.htype);
+        var htype=params.htype.split(';');
+        if(htype.length>1){
+            htype.splice(-1,1);
+        }
+        query.where('house-type').in(htype);
     }
     if(params.province!='' && params.province!=undefined){
         query.where('location.province').equals(params.province);
@@ -310,7 +330,11 @@ router.get('/average', (req,res) => {
     params= req.query;
     query = House.find();
     if (params.htype!=undefined && params.htype!=''){
-        query.where('house-type').equals(params.htype);
+        var htype=params.htype.split(';');
+        if(htype.length>1){
+            htype.splice(-1,1);
+        }
+        query.where('house-type').in(htype);
     }
     if(params.province!='' && params.province!=undefined){
         query.where('location.province').equals(params.province);

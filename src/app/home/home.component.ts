@@ -152,6 +152,7 @@ export class HomeComponent implements OnInit {
 
   graphChange (){
     this.processActive=true;
+
     this.isNotPredict= this.graphType != "predictPrice";
     this.menuComponent.setLevel(this.graphLevel[this.graphType]);
     if(this.graphType == 'hTypePercent'){
@@ -160,10 +161,13 @@ export class HomeComponent implements OnInit {
     else{
       this.menuComponent.haveHType = true;
     }
-    if(this.graphType == 'priceTrend'){
+    if(this.graphType == 'priceTrend' || this.graphType =='postPerDay'){
       this.menuComponent.hasDateStep=true;
     }
-    else this.menuComponent.hasDateStep=false;
+    else {
+      this.menuComponent.hasDateStep=false;
+    }
+    this.menuComponent.resetSelection(this.graphLevel[this.graphType]);
   }
 
 
@@ -173,8 +177,9 @@ export class HomeComponent implements OnInit {
     let dataProviders = { };
     let mapName = '';
     if (vm.graphType == 'itemDensityGraph'){
-      this.houseService.getHouse(this.menuComponent.htype, this.menuComponent.province, this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 5)
+      this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 5)
       .subscribe( res => {
+        console.log(res['data'])
         let dataProvider=res['data'];
         dataProvider.forEach((item) => {
           item['_id']=item['_id'].replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})
@@ -189,8 +194,9 @@ export class HomeComponent implements OnInit {
                   "unit": " listing(s)",
                   "position": "left",
                   "title": "Count",
+                  "minimum":0
               }],
-              "maxSelectedSeries": 10,
+              "maxSelectedSeries": 20,
               "startDuration": 1,
               "mouseWheelScrollEnabled": true,
               "graphs": [{
@@ -231,7 +237,7 @@ export class HomeComponent implements OnInit {
         province = "ho chi minh";
         dataProviders=vm.hcmDataProviders;
       }
-      this.houseService.getHouse(this.menuComponent.htype, province, this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 5)
+      this.houseService.getHouse(this.menuComponent.getSelected(), province, this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 5)
       .subscribe( res => {
         if(res['err']==true){
           return
@@ -277,7 +283,7 @@ export class HomeComponent implements OnInit {
     }
 
     
-    this.houseService.getHouse(this.menuComponent.htype, province, "", '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 2)
+    this.houseService.getHouse(this.menuComponent.getSelected(), province, "", '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 2)
       .subscribe( res => {
         if (res['err']==true){
           return;
@@ -356,7 +362,7 @@ export class HomeComponent implements OnInit {
   }
 
   drawDistributeGraph(){
-    this.houseService.getHouse(this.menuComponent.htype,this.menuComponent.province, this.menuComponent.county, 
+    this.houseService.getHouse(this.menuComponent.getSelected(),this.menuComponent.province, this.menuComponent.county, 
       this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 0).subscribe( res => {
         let priceDist : number[] =[];
         let min: number = res['data'].length > 0 ? res['data'][0]['price'] : 0 , max : number = 0;
@@ -540,7 +546,7 @@ export class HomeComponent implements OnInit {
     let zeroCount=0;
     let vm = this;
 
-    this.houseService.getHouse(this.menuComponent.htype, province, '', '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 2)
+    this.houseService.getHouse(this.menuComponent.getSelected(), province, '', '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 2)
           .subscribe( res => {
             if (res['err']==true){
               return;
@@ -715,7 +721,7 @@ export class HomeComponent implements OnInit {
 
   drawUploadTendency(){
 
-    this.houseService.getHouse(this.menuComponent.htype, this.menuComponent.province, this.menuComponent.county, this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 6)
+    this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, this.menuComponent.county, this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 6)
     .subscribe( res => {
       if(res['err']==true){
         return;
@@ -851,7 +857,7 @@ export class HomeComponent implements OnInit {
   }
 
   drawHouseTypePieChart(){
-    this.houseService.getHouse(this.menuComponent.htype, this.menuComponent.province, this.menuComponent.county, 
+    this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, this.menuComponent.county, 
       this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 3)
       .subscribe( res =>{
         if(res['err']==true){
@@ -919,7 +925,7 @@ export class HomeComponent implements OnInit {
 
   drawTrendOfPrice(){
     let dateStep=this.menuComponent.dateStep;
-    this.houseService.getHouse(this.menuComponent.htype,this.menuComponent.province, this.menuComponent.county, 
+    this.houseService.getHouse(this.menuComponent.getSelected(),this.menuComponent.province, this.menuComponent.county, 
       this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 4).subscribe( res => {
         let timeData=res['data']
         
@@ -954,7 +960,7 @@ export class HomeComponent implements OnInit {
               let tempData=showData[showData.length-1];
               tempDate.setDate(tempDate.getDate() + dateStep);
               while(tempDate.getTime()<date.getTime()) {
-                  showData.push({"date":nextDate,"dateString":nextDate.toISOString().slice(0,10),"total":tempData['total'],"count":tempData['count'],"list":tempData['list']});
+                  showData.push({"date":nextDate,"dateString":nextDate.toISOString().slice(0,10),"total":tempData['total'],"count":tempData['count'],"firstQuartile":tempData['firstQuartile'],"thirdQuartile":tempData['thirdQuartile'],"list":tempData['list']});
                   nextDate=new Date(tempDate);
                   tempDate.setDate(tempDate.getDate() + dateStep);
               }
@@ -972,7 +978,7 @@ export class HomeComponent implements OnInit {
           item["list"].forEach( val =>{
             sum+=val;
           })
-          item['total']=sum/item['list'].length;
+          item['total']=Math.round(sum/item['list'].length);
         })
         var chart = AmCharts.makeChart("chartdiv", {
           "type": "serial",
@@ -983,6 +989,10 @@ export class HomeComponent implements OnInit {
           "mouseWheelZoomEnabled":true,
           "dataDateFormat": "YYYY-MM-DD",
           "synchronizeGrid":true,
+          "legend": {
+            "useGraphSettings": true,
+            "valueWidth":100,
+          },
           "valueAxes": [{
                 "id":"v1",
                 "axisColor": "#FF6600",
@@ -1002,8 +1012,8 @@ export class HomeComponent implements OnInit {
           },
           "graphs": [{
                 "valueAxis": "v1",
-                "lineColor": "#FF6600",
-                "bullet": "round",
+                "lineColor": "#801F15",
+                "bullet": "square",
                 "bulletBorderThickness": 1,
                 "hideBulletsCount": 30,
                 "title": "Average price",
@@ -1032,8 +1042,8 @@ export class HomeComponent implements OnInit {
             "fillAlphas": 0
             },{
                 "valueAxis": "v1",
-                "lineColor": "#FF6600",
-                "bullet": "round",
+                "lineColor": "#A5C663",
+                "bullet": "triangleUp",
                 "bulletBorderThickness": 1,
                 "hideBulletsCount": 30,
                 "title": "Median",
@@ -1123,7 +1133,7 @@ export class HomeComponent implements OnInit {
   }
 
   drawScatterPrice(){
-    this.houseService.getHouse(this.menuComponent.htype,this.menuComponent.province, this.menuComponent.county, 
+    this.houseService.getHouse(this.menuComponent.getSelected(),this.menuComponent.province, this.menuComponent.county, 
       this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 0).subscribe( res => {
         if(res['err']==true){
           return;

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuApiService } from '../menu-api/menu-api.service';
 import { HouseService } from '../house/house.service';
+import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 
 
 import { Observable } from 'rxjs/Observable';
@@ -41,7 +42,8 @@ export class DropdownMenuComponent implements OnInit {
   haveHType : boolean = true;
   dateStep : number=1;
   hasDateStep : boolean=false;
-
+  optionsModel: number[];
+  myOptions: IMultiSelectOption[];
 
   constructor(private menuApiService : MenuApiService, private houseService : HouseService) { 
       this.menuApiService.getMenu().subscribe( res => {
@@ -53,11 +55,13 @@ export class DropdownMenuComponent implements OnInit {
   ngOnInit() {
   }
 
+
   isTransAndHouseSet(){
     return this.transType!='' && this.htype!='';
   }
 
   setHasChanged(val){
+    console.log("IN");
     this.hasChanged= val;
 
   }
@@ -65,12 +69,36 @@ export class DropdownMenuComponent implements OnInit {
   loadMenu(){
       this.transTypes = Object.keys(this.menu_json['menu']);
       this.htypes = this.menu_json['house_type'];
+      let arr=[];
+      let index=0;
+      this.htypes.forEach((item)=>{
+        arr.push({"id":index,"name":item});
+        index+=1;
+      })
+      this.myOptions=arr;
       this.htype = '';
       this.changeCount('all');
   }
 
   setLevel(number){
     this.graphLevel = number;
+  }
+
+  resetSelection(level){
+    if(level>=3)
+    {
+      this.transType   = '';
+    }
+    if (level>=2){
+      this.province    = '';
+    }
+    if (level>=1){
+      this.county      = '';
+      this.ward        = '';
+    }
+    if(this.haveHType==false){
+      this.htype       = '';
+    }
   }
 
   fillMenu(menu){
@@ -156,5 +184,11 @@ export class DropdownMenuComponent implements OnInit {
       }
     });
   }
-
+  getSelected(){
+    let ret=''
+    this.optionsModel.forEach((item)=>{
+      ret+=this.myOptions[item]['name']+";";
+    })
+    return ret;
+  }
 }

@@ -10,6 +10,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ToOtherPipe } from './home/toOther.pipe';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { RemoveChartDirective } from './home/remove-chart.directive';
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+
 
 const appRoutes: Routes = [
     {
@@ -32,13 +34,15 @@ const appRoutes: Routes = [
     ToOtherPipe,
     DropdownMenuComponent,
     RemoveChartDirective
+    
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     JsonpModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    MultiselectDropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]

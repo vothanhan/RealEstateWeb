@@ -15,7 +15,7 @@
         <option value = "predictPrice">Predict Price</option>
     </select>
     <dropdown-menu></dropdown-menu>
-    <button appRemoveChart [clearID]="'chartdiv'" (click) = "processButton()" [disabled]='(!processActive && !menuComponent.hasChanged)'>Click me!</button>
+    <button appRemoveChart [clearID]="'chartdiv'" (click) = "processButton()" [disabled]='(!processActive && !menuComponent.hasChanged)' class='btn'>Click me!</button>
 
     <div id="chartdiv" [ngClass]="{'isLong':isLong}" *ngIf="isNotPredict"></div>
 </div>

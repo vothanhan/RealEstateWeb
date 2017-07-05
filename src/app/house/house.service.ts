@@ -13,7 +13,7 @@ export class HouseService {
   constructor(private http: Http) { };
 
 
-  getHouse(houseType : string, province : string, county : string, ward : string, transtype: string, startDate: string, endDate: string, isCount : number): Observable<object>{
+  getHouse(houseType, province : string, county : string, ward : string, transtype: string, startDate: string, endDate: string, isCount : number): Observable<object>{
       let hv : string = houseType != '' && houseType != undefined ? 'htype='+houseType.replace(' ','%20'):'';
       let pv : string = province != '' && province != undefined ? '&province='+province.replace(' ','%20'):'';
       let cv : string = county != '' && county != undefined ? '&county='+county.replace(' ','%20'):'';

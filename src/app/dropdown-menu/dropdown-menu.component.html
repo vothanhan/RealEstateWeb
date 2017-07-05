@@ -19,11 +19,8 @@
         <option *ngFor="let value of wards; let i = index" [value]="value">{{value | toOther}} ({{typeCount['wards'][i]}})</option>
     </select>
 
-    <select id='htypeMenu' [(ngModel)] = "htype" (change) = "fillMenu('htype')" *ngIf='haveHType'>
-        <option value=''>Select house type</option>
-        <option *ngFor="let value of htypes; let i = index" [value]="value">{{value | toOther}} ({{typeCount["htypes"][i]}})</option>
-    </select>
-
+    <ss-multiselect-dropdown [options]="myOptions" [(ngModel)]="optionsModel" *ngIf="haveHType" (ngModelChange)="setHasChanged(true)"></ss-multiselect-dropdown>
+        
     <div>
         <label>Start date</label>
         <input type="date" id='startDate' [(ngModel)] = "startDate" (click) = "setHasChanged(true)">
@@ -32,7 +29,7 @@
         <label>End date</label>
         <input type="date" id='endDate' [(ngModel)] = "endDate" (click) = "setHasChanged(true)">
     </div>
-    <div>
+    <div *ngIf='hasDateStep'>
         <label>Date step</label>
         <input type="number" [(ngModel)]= "dateStep" (change) = "setHasChanged(true)" min=1>
     </div>
