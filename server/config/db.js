@@ -1,4 +1,4 @@
 module.exports = {
-    //url:'mongodb://vothanhan:CS422InventoryManagement@ds129260.mlab.com:29260/realestate'
-    url:'mongodb://127.0.0.1/realestate'
+    url:'mongodb://anvo:anvo@ds151232.mlab.com:51232/realestate'
+    //url:'mongodb://127.0.0.1/realestate'
 }
