@@ -42,7 +42,7 @@ export class DropdownMenuComponent implements OnInit {
   haveHType : boolean = true;
   dateStep : number=1;
   hasDateStep : boolean=false;
-  optionsModel: number[];
+  optionsModel: number[]=[];
   myOptions: IMultiSelectOption[];
 
   constructor(private menuApiService : MenuApiService, private houseService : HouseService) { 
@@ -61,9 +61,7 @@ export class DropdownMenuComponent implements OnInit {
   }
 
   setHasChanged(val){
-    console.log("IN");
     this.hasChanged= val;
-
   }
 
   loadMenu(){
