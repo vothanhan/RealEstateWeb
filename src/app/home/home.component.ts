@@ -898,8 +898,8 @@ export class HomeComponent implements OnInit {
               }]
             },
             "dataProvider": res['data'],
-            "valueField": "value",
-            "titleField": "house_type",
+            "valueField": "count",
+            "titleField": "_id",
             "export": {
               "enabled": true
             }
