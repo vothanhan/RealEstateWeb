@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MenuApiService } from '../menu-api/menu-api.service';
 import { HouseService } from '../house/house.service';
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import {IMultiSelectSettings} from "angular-2-dropdown-multiselect";
+import {IMultiSelectTexts} from "angular-2-dropdown-multiselect";
 
 
 import { Observable } from 'rxjs/Observable';
@@ -44,6 +46,9 @@ export class DropdownMenuComponent implements OnInit {
   hasDateStep : boolean=false;
   optionsModel: number[]=[];
   myOptions: IMultiSelectOption[];
+  mySettings: IMultiSelectSettings = {
+  };
+  myTexts: IMultiSelectTexts={};
 
   constructor(private menuApiService : MenuApiService, private houseService : HouseService) { 
       this.menuApiService.getMenu().subscribe( res => {
