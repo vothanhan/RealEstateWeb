@@ -22,6 +22,12 @@
     <ss-multiselect-dropdown [options]="myOptions" [(ngModel)]="optionsModel" *ngIf="haveHType" (ngModelChange)="setHasChanged(true)"></ss-multiselect-dropdown>
         
     <div>
+        <select id='houseMenu' [(ngModel)] = "htype" (change) = "fillMenu('htype')">
+            <option value=''>Select ward</option>
+            <option *ngFor="let value of htypes; let i = index" [value]="value">{{value | toOther}} ({{typeCount['htypes'][i]}})</option>
+        </select>
+    </div>
+    <div>
         <label>Start date</label>
         <input type="date" id='startDate' [(ngModel)] = "startDate" (click) = "setHasChanged(true)">
     </div>
