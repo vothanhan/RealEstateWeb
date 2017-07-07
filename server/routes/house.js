@@ -159,7 +159,6 @@ router.get("/aggregate",(req, res) =>{
 router.get("/htypepercent", (req, res) =>{
     params= req.query;
     query=[];
-    groupBy="$house-type";
     if(params.province!='' && params.province!=undefined){
         query.push({"$match":{"location.province":params.province}});
         groupBy="$location.county";
@@ -187,7 +186,7 @@ router.get("/htypepercent", (req, res) =>{
         
         query.push({"$match":{"transaction-type":params.transtype}});
     }
-    query.push({"$group":{"_id":groupBy,"count": {"$sum": 1}}});
+    query.push({"$group":{"_id":"$house-type","count": {"$sum": 1}}});
     House.aggregate(query,(err,house) => {
         if(err){
             res.json({"err":true,"data":err});
