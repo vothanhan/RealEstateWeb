@@ -67,6 +67,7 @@ export class DropdownMenuComponent implements OnInit {
   loadMenu(){
       this.transTypes = Object.keys(this.menu_json['menu']);
       this.htypes = this.menu_json['house_type'];
+      console.log(this.htypes);
       let arr=[];
       let index=0;
       this.htypes.forEach((item)=>{
