@@ -157,53 +157,6 @@ router.get("/aggregate",(req, res) =>{
 });
 
 router.get("/htypepercent", (req, res) =>{
-    // params= req.query;
-    // query = House.find();
-    // if(params.province!='' && params.province!=undefined){
-    //     query.where('location.province').equals(params.province);
-    //     if(params.county!='' && params.county!= undefined ){
-    //         query.where('location.county').equals(params.county);
-    //         if(params.ward!='' && params.ward!= undefined ){
-    //             query.where('location.ward').equals(params.ward);
-    //         }
-    //     }
-    // }
-    // if(params.startDate!='' && params.startDate != undefined){
-    //     query.where("post-time.date").gte(new Date(params.startDate));
-    // }
-    // if(params.endDate!='' && params.endDate != undefined){
-    //     query.where("post-time.date").lte(new Date(params.endDate));
-    // }
-    // if(params.transtype!='' && params.transtype!=undefined ){
-    //     query.where('transaction-type').equals(params.transtype);
-    // }
-    // query.select("house-type");
-    // query.exec((err, houses) =>{
-    //     response= {};
-    //     if(err){
-    //         response = {"err":true};
-    //         console.log(err);
-    //         res.json(response);
-    //     }
-    //     else{
-    //         house_count={};
-
-    //         houses.forEach( function(element, index) {
-    //             if(!house_count.hasOwnProperty(element['house-type'])){
-    //                 house_count[element['house-type']]=1;
-    //             }
-    //             else{
-    //                 house_count[element['house-type']]+=1;
-    //             }
-    //         });
-    //         data=[]
-    //         for(htype in house_count){
-    //             data.push({"house_type":htype,"value":house_count[htype]})
-    //         }
-    //         response = {'err': false, "data": data};
-    //         res.json(response);
-    //     }
-    // })
     params= req.query;
     query=[];
     groupBy="$house-type";
