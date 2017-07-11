@@ -18,4 +18,5 @@
     <button appRemoveChart [clearID]="'chartdiv'" (click) = "processButton()" [disabled]='(!processActive && !menuComponent.hasChanged)' class='btn'>Click me!</button>
 
     <div id="chartdiv" [ngClass]="{'isLong':isLong}" *ngIf="isNotPredict"></div>
+    <div id="textDiv" *ngIf="!isNotPredict">{{predictInfo}}</div>
 </div>

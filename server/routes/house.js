@@ -452,51 +452,52 @@ router.get('/average', (req,res) => {
 })
 
 router.get('/countmenu', (req,res) =>{
-    console.log("IN");
-    House.find({},"location transaction-type house-type",(err, houses) => {
-        console.log("IN");
-        response= {};
-        if (err){
-            console.log(err);
-            response= {err: true, data: err};
-            res.json(response);
+    params= req.query;
+    query=[];
+    groupBy="$"+params.groupBy;
+    if(params.province!='' && params.province!=undefined){
+        query.push({"$match":{"location.province":params.province}});
+        groupBy="$location.county";
+        if(params.county!='' && params.county!= undefined ){
+            query.push({"$match":{"location.county":params.county}});
+            groupBy = "$location.ward";
         }
-        else {
-            var menu={};
-            var transType;
-            var houseType;
-            var hLocation;
-            for(var i =0;i < houses.length;i++){
-                if (i%5000==0){
-                    console.log(i);
-                }
-                transType=houses[i]['transaction-type'];
-                houseType= houses[i]['house-type'];
-                hLocation = houses[i]['location'];
-                if(!menu.hasOwnProperty(transType)){
-                    menu[transType]={};
-                }
-                if(!menu[transType].hasOwnProperty(hLocation['province'])){
-                    menu[transType][hLocation['province']]={};
-                }
-                if(!menu[transType][hLocation['province']].hasOwnProperty(hLocation['county'])){
-                    menu[transType][hLocation['province']][hLocation['county']]={};
-                }
-                if(!menu[transType][hLocation['province']][hLocation['county']].hasOwnProperty(hLocation['ward'])){
-                    menu[transType][hLocation['province']][hLocation['county']][hLocation['ward']]={};
-                }
-                if(!menu[transType][hLocation['province']][hLocation['county']][hLocation['ward']].hasOwnProperty(houseType)){
-                    menu[transType][hLocation['province']][hLocation['county']][hLocation['ward']][houseType]=1;
-                }
-                else{
-                    menu[transType][hLocation['province']][hLocation['county']][hLocation['ward']][houseType]+=1;
-                }
-            }
+    }
+    if (params.htype!=undefined && params.htype!=''){
+        var htype=params.htype.split(';');
+        if(htype.length>1){
+            htype.splice(-1,1);
+        }
+        query.push({"$match":{"house-type":{"$in":htype}}});
+    }
+    matchDate={};
+    hasDate=false;
+    if(params.startDate!='' && params.startDate != undefined){
+        matchDate['$gte']=new Date(params.startDate);
+        hasDate=true;
+    }
+    if(params.endDate!='' && params.endDate != undefined){
+        matchDate['$lte']=new Date(params.endDate);
+        hasDate=true;
+    }
+    if (hasDate==true){
+        query.push({"$match":{"post-time.date":matchDate}});
+    }
 
-            response = {err: false, data:menu};
-            res.json(response);
+    if(params.transtype!='' && params.transtype!=undefined ){
+        
+        query.push({"$match":{"transaction-type":params.transtype}});
+    }
+    query.push({"$group":{"_id":groupBy,"count": {"$sum": 1}}});
+    House.aggregate(query,(err,house) => {
+        if(err){
+            res.json({"err":true,"data":err});
+
         }
-    })
+        else{
+            res.json({"err":false,"data":house});
+        }
+    });
 })
 
 module.exports = router;

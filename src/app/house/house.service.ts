@@ -25,38 +25,51 @@ export class HouseService {
       sd = hv == '' && tv == '' ? sd.slice(1):sd;
       ed = hv == '' && tv == '' && sd == '' ? ed.slice(1):ed;
       let qmark : string = hv != '' || pv != '' || tv !='' || sd !='' || ed !='' ? '?' : '';
-      let count : string ;
+      let apiName : string ;
       switch(isCount){
         case 1: 
-          count='/count';
+          apiName='/count';
           break
         case 2: 
-          count='/average';
+          apiName='/average';
           break;
         case 3 : 
-          count="/htypepercent";
+          apiName="/htypepercent";
           break;
         case 4 :
-          count="/trendprice";
+          apiName="/trendprice";
           break;
         case 5 : 
-          count= "/aggregate";
+          apiName= "/aggregate";
           break;
         case 6 :
-          count= "/countpost";
+          apiName= "/countpost";
           break;
         default:
-          count="";
+          apiName="";
       }
 
-      return this.http.get('/api/house'+count+qmark+hv+tv+pv+cv+wv+sd+ed).map((response: Response) =>{
+      return this.http.get('/api/house'+apiName+qmark+hv+tv+pv+cv+wv+sd+ed).map((response: Response) =>{
           return response.json()
       }).catch(this.handleError)
   }
 
 
-  getCountMenu() : Observable<object>{
-    return this.http.get('/api/house/countmenu').map((response: Response) =>{
+  getCountMenu(houseType, province : string, county : string, transtype: string, startDate: string, endDate: string, groupBy: string) : Observable<object>{
+    let hv : string = houseType != '' && houseType != undefined ? 'htype='+houseType.replace(' ','%20'):'';
+    let pv : string = province != '' && province != undefined ? '&province='+province.replace(' ','%20'):'';
+    let cv : string = county != '' && county != undefined ? '&county='+county.replace(' ','%20'):'';
+    let tv : string = transtype != '' && transtype != undefined ? '&transtype='+transtype.replace(' ','%20'):'';
+    let sd : string = startDate != '' && startDate!= undefined ? "&startDate="+startDate:"";
+    let ed : string = endDate != '' && endDate!= undefined ? "&endDate="+endDate:"";
+    let gb : string = "&groupBy="+groupBy;
+    tv = hv == '' ? tv.slice(1): tv;
+    sd = hv == '' && tv == '' ? sd.slice(1):sd;
+    ed = hv == '' && tv == '' && sd == '' ? ed.slice(1):ed;
+    gb = hv == '' && tv == '' && sd == '' && ed =='' ? gb.slice(1):gb;
+    let qmark : string = hv != '' || pv != '' || tv !='' || sd !='' || ed !='' || gb !='' ? '?' : '';
+
+    return this.http.get('/api/house/countmenu'+qmark+hv+tv+pv+cv+sd+ed+gb).map((response: Response) =>{
       return response.json();
     }).catch(this.handleError);
   }

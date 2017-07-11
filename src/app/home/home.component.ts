@@ -87,7 +87,8 @@ export class HomeComponent implements OnInit {
     "priceTrend":0,
     "boxPlotPrice":1,
     "priceScatter":0,
-    "predictPrice":0,
+    "predictPrice":0
+
   }
 
   isLong : boolean;
@@ -96,6 +97,7 @@ export class HomeComponent implements OnInit {
   isRender : boolean = false;
   processActive : boolean = true;
   isNotPredict : boolean = true;
+  predictInfo:any;
 
   @ViewChild(DropdownMenuComponent)
 
@@ -114,7 +116,7 @@ export class HomeComponent implements OnInit {
     this.menuComponent.setHasChanged(false);  // make button disabled if graph is not change, to not rerender the same graph
     this.isRender=true;
     this.processActive=false;
-    if (this.graphType == 'priceDistribute' || this.graphType == 'priceProb'){
+    if (this.graphType == 'priceDistribute' || this.graphType == 'priceProb' || this.graphType == "predictPrice"){
       this.drawDistributeGraph();
     }
     else if (this.graphType == 'itemDensity' || this.graphType == "itemDensityGraph"){
@@ -418,76 +420,106 @@ export class HomeComponent implements OnInit {
     bandwidth = 1.06 * d3.deviation(priceDist,function(item){return item;}) * Math.pow(priceDist.length,-1/5);
     let bins=x.ticks(numHistBins);
     bins.unshift(0);
-    let kde = kernelDensityEstimator(epanechnikovKernel(bandwidth), bins);
+    let kde = this.kernelDensityEstimator(this.epanechnikovKernel(bandwidth), bins);
 
 
     let datum = kde(priceDist);
-    let maxYDatum=0
-    for(let i=0;i<datum.length;i++){
+    let MaxY=datum[0];
+    let lastMax;
+    let maxYDatum=datum[0][1]
+    for(let i=1;i<datum.length;i++){
+      MaxY = datum[i][1] > maxYDatum ? datum[i]:MaxY;
       maxYDatum = datum[i][1] > maxYDatum ? datum[i][1] : maxYDatum;
     }
-
-    maxY = showKDP == true ? maxYDatum : maxY;
-
-    // the y-scale parameters
-    let y = d3.scale.linear()
-        .domain([0, maxY])
-        .range([height, 0])
-    let xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom")
-    let yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left")
-    let line = d3.svg.line()
-        .interpolate("basis")
-        .x(function(d) { return x(d[0]); })
-        .y(function(d) { return y(d[1]); })
-    //var kde = kernelDensityEstimator(epanechnikovKernel(7), x.ticks(100));
-
-    //alert("kde is " + kde.toSource());
-    let svg = d3.select("#chartdiv").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-    // draw the background
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis)
-      .append("text")
-        .attr("class", "label")
-        .attr("x", width)
-        .attr("y", -30)
-        .style("text-anchor", "end")
-        .text("Price")
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-    // draw the histogram and kernel density plot 
-      // calculate the number of histogram bins
-    
-    
-    //console.log(svg.datum(kde(priceDist)))
-    if (showKDP == false){
-      svg.selectAll(".bar")
-        .data(data)
-        .enter().insert("rect", ".axis")
-          .attr("class", "bar")
-          .attr("x", function(d) { return x(d.x) + 1; })
-          .attr("y", function(d) { return y(d.y); })
-          .attr("width", x(data[0].dx + data[0].x) - x(data[0].x) - 1)
-          .attr("height", function(d) {return height-y(d.y); });
+    lastMax= MaxY[1]==datum[0][1] ? datum[1]:datum[0];
+    for(let i=0;i<datum.length;i++){
+      lastMax= lastMax[1]<datum[i][1] && datum[i][1]!=MaxY[1]?datum[i]:lastMax;
     }
-    // show the kernel density plot
-    if(showKDP == true) {
-      svg.append("path")
-        .datum(datum)
-        .attr("class", "line")
-        .attr("d", line);
+    if(this.graphType=="priceProb")
+    {
+      maxY = showKDP == true ? maxYDatum : maxY;
+
+      // the y-scale parameters
+      let y = d3.scale.linear()
+          .domain([0, maxY])
+          .range([height, 0])
+      let xAxis = d3.svg.axis()
+          .scale(x)
+          .orient("bottom")
+      let yAxis = d3.svg.axis()
+          .scale(y)
+          .orient("left")
+      let line = d3.svg.line()
+          .interpolate("basis")
+          .x(function(d) { return x(d[0]); })
+          .y(function(d) { return y(d[1]); })
+      //var kde = kernelDensityEstimator(epanechnikovKernel(7), x.ticks(100));
+
+      //alert("kde is " + kde.toSource());
+      let svg = d3.select("#chartdiv").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      // draw the background
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+        .append("text")
+          .attr("class", "label")
+          .attr("x", width)
+          .attr("y", -30)
+          .style("text-anchor", "end")
+          .text("Price")
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+      // draw the histogram and kernel density plot 
+        // calculate the number of histogram bins
+      
+      
+      //console.log(svg.datum(kde(priceDist)))
+      if (showKDP == false){
+        svg.selectAll(".bar")
+          .data(data)
+          .enter().insert("rect", ".axis")
+            .attr("class", "bar")
+            .attr("x", function(d) { return x(d.x) + 1; })
+            .attr("y", function(d) { return y(d.y); })
+            .attr("width", x(data[0].dx + data[0].x) - x(data[0].x) - 1)
+            .attr("height", function(d) {return height-y(d.y); });
       }
-    function kernelDensityEstimator(kernel, x) {
+      // show the kernel density plot
+      if(showKDP == true) {
+        svg.append("path")
+          .datum(datum)
+          .attr("class", "line")
+          .attr("d", line);
+        }
+    }
+    else if(this.graphType=="predictPrice"){
+      let predict=[MaxY[0]];
+      console.log(MaxY[1]/2);
+      console.log(MaxY[1]-lastMax[1]);
+      if((MaxY[1]-lastMax[1])<(MaxY[1])/2){
+        predict.push(lastMax[0]);
+      }
+      let prediction="";
+      if(predict.length==1){
+        prediction="Price range: " + min.toLocaleString() + " VND - " + max.toLocaleString() + " VND. Most likely price range: " 
+                   + predict[0].toLocaleString()+"\xB1"+parseInt(bandwidth).toLocaleString()+" VND";
+      }
+      else{
+        prediction="Price range: " + min.toLocaleString() + " VND - " + max.toLocaleString() + " VND. Most likely price range: " 
+                   + predict[0].toLocaleString()+"\xB1"+parseInt(bandwidth).toLocaleString()+" VND and "+predict[1].toLocaleString()+"\xB1"+parseInt(bandwidth).toLocaleString()+"VND";
+      }
+      this.predictInfo=prediction;
+    }
+    
+    
+  }
+  kernelDensityEstimator(kernel, x) {
 
       return function(sample) {
         return x.map(function(x) {
@@ -496,15 +528,14 @@ export class HomeComponent implements OnInit {
         });
       };
     }
-    function epanechnikovKernel(bandwith) {
-      return function(u) {
-        //return Math.abs(u /= bandwith) <= 1 ? .75 * (1 - u * u) / bandwith : 0;
+  epanechnikovKernel(bandwith) {
+    return function(u) {
+      //return Math.abs(u /= bandwith) <= 1 ? .75 * (1 - u * u) / bandwith : 0;
 
-        if(Math.abs(u = u /  bandwith) <= 1) {
-         return 0.75 * (1 - u * u);
-        } else return 0;
-      };
-    }
+      if(Math.abs(u = u /  bandwith) <= 1) {
+       return 0.75 * (1 - u * u);
+      } else return 0;
+    };
   }
 
   drawHistogram(x){
