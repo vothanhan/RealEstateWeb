@@ -1,21 +1,5 @@
 {
     "menu":{
-    "Khac": {
-        "ha noi": {
-            "dong da": {
-                "lien": [
-                    "Khac"
-                ]
-            }
-        },
-        "ho chi minh": {
-            "quan 9": {
-                "phu huu": [
-                    "Khac"
-                ]
-            }
-        }
-    },
     "can ban": {
         "ha noi": {
             "ba dinh": {
