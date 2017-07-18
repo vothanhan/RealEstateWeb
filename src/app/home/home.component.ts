@@ -113,6 +113,7 @@ export class HomeComponent implements OnInit {
   
   chooseGraph(id){
     this.graphType=id;
+    this.graphChange();
   }
 
   // Draw graph according to button
