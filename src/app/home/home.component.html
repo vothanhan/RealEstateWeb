@@ -1,61 +1,57 @@
 <div>
     <div class="row">
     <div class="scrollmenu">    
-        <div class="col-sm-1" id="itemDensity" (click)="chooseGraph(itemDensity)">
+        <div class="col-sm-1" id="itemDensity" (click)="chooseGraph('itemDensity')">
                 <img src="assets/images/graph-1.png">
                 <div class="graphName"> Listing Distribution</div>
         </div>
-        <div class="col-sm-1" id="itemDensityGraph" (click)="chooseGraph(itemDensityGraph)">
+        <div class="col-sm-1" id="itemDensityGraph" (click)="chooseGraph('itemDensityGraph')">
                 <img src="assets/images/graph-2.png">
                 <div class="graphName"> Listing Distribution</div>
         </div>
-        <div class="col-sm-1" id="priceDistribute" (click)="chooseGraph(priceDistribute)">
+        <div class="col-sm-1" id="priceDistribute" (click)="chooseGraph('priceDistribute')">
                 <img src="assets/images/graph-3.png">
                 <div class="graphName"> Price Distribution</div>
         </div>
-        <div class="col-sm-1" id="priceProb" (click)="chooseGraph(priceProb)">
+        <div class="col-sm-1" id="priceProb" (click)="chooseGraph('priceProb')">
                 <img src="assets/images/graph-4.png">
                 <div class="graphName"> Density Probability</div>
         </div>
-        <div class="col-sm-1" id="meanPrice" (click)="chooseGraph(meanPrice)">
+        <div class="col-sm-1" id="meanPrice" (click)="chooseGraph('meanPrice')">
                 <img src="assets/images/graph-5.png">
                 <div class="graphName"> Mean & Median</div>
         </div>
-        <div class="col-sm-1" id="boxPlotPrice" (click)="chooseGraph(boxPlotPrice)">
+        <div class="col-sm-1" id="boxPlotPrice" (click)="chooseGraph('boxPlotPrice')">
                 <img src="assets/images/graph-6.png">
                 <div class="graphName"> Box Plot Price</div>
         </div>
-        <div class="col-sm-1" id="postPerDay" (click)="chooseGraph(postPerDay)">
+        <div class="col-sm-1" id="postPerDay" (click)="chooseGraph('postPerDay')">
                 <img src="assets/images/graph-7.png">
                 <div class="graphName"> Posting Trend</div>
         </div>
-        <div class="col-sm-1" id="hTypePercent" (click)="chooseGraph(hTypePercent)">
+        <div class="col-sm-1" id="hTypePercent" (click)="chooseGraph('hTypePercent')">
                 <img src="assets/images/graph-8.png">
                 <div class="graphName"> House Type </div>
         </div>
-        <div class="col-sm-1" id="priceTrend" (click)="chooseGraph(priceTrend)">
+        <div class="col-sm-1" id="priceTrend" (click)="chooseGraph('priceTrend')">
                 <img src="assets/images/graph-9.png">
                 <div class="graphName"> Price Trend</div>
         </div>
-        <div class="col-sm-1" id="priceScatter" (click)="chooseGraph(priceScatter)">
-                <img src="assets/images/graph-10.png">
-                <div class="graphName"> Price Scatter Plot</div>
-        </div>
-        <div class="col-sm-1" id="predictPrice" (click)="chooseGraph(predictPrice)">
+        <div class="col-sm-1" id="predictPrice" (click)="chooseGraph('predictPrice')">
                 <img src="assets/images/graph-11.png">
                 <div class="graphName"> Price Prediction</div>
         </div>
     </div>
     </div>
 
-
+<!-- 
     <select id='graphMenu' [(ngModel)] = "graphType" (change)='graphChange()'>
         <option value=''>Select graph type</option>
         <option value='itemDensity'>Listings distribution (Heat map)</option>
         <option value='itemDensityGraph'>Listings distribution (Bar chart)</option>
         <option value = 'priceDistribute'>Price distribution</option>
         <option value = 'priceProb'>Density Probability</option>
-        <!-- <option value = 'priceAverage' > Map of average price </option> -->
+        <option value = 'priceAverage' > Map of average price </option>
         <option value = 'meanPrice'> Graph of average price </option>
         <option value = "boxPlotPrice"> Box Plot of price </option>
         <option value = 'postPerDay'> Broker's usage trend </option>
@@ -63,7 +59,7 @@
         <option value = "priceTrend">Price trend </option>
         <option value = "priceScatter">Price's scatter plot</option>
         <option value = "predictPrice">Predict Price</option>
-    </select>
+    </select> -->
     <dropdown-menu></dropdown-menu>
          <div class="perspective">
                 <button appRemoveChart [clearID]="'chartdiv'" (click) = "processButton()" [disabled]='(!processActive && !menuComponent.hasChanged)' class='enjoy-css'> Show Graph </button>
