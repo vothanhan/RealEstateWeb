@@ -1,4 +1,10 @@
+
+
 /* You can add global styles to this file, and also import other style files */
+bodey {
+  background-color: #f3f3f3;
+}
+
 .bar {
   fill: #bbb;
   shape-rendering: crispEdges;

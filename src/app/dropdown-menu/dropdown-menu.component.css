@@ -1,0 +1,85 @@
+div.date {
+    float :right;
+    margin-right: 5%;
+}
+
+select {
+    margin: auto 1% auto 1%;
+}
+
+#transMenu {
+    margin-left: 5%;
+}
+
+div.date_step {
+    margin: 5px auto auto 5%;
+}
+
+div.start_date {
+    margin-bottom: 10px;
+}
+
+div.house_type{
+    margin-left: 1%;
+}
+
+.styled-select select {
+   background: transparent;
+   border: none;
+   font-size: 14px;
+   height: 29px;
+   padding: 5px; /* If you add too much padding here, the options won't show in IE */
+   width: 268px;
+}
+
+.styled-select.slate {
+   background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
+   height: 34px;
+   width: 13vw;
+    color: #5ba9dd;
+    border: 1px solid #989da2;
+    padding-left: 10px;
+}
+
+.styled-select.slate select {
+   border: 1px solid #e4e3e8;
+   font-size: 16px;
+   height: 34px;
+   width: 13vw;
+   color: #71b5e2;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+}
+
+.start_date .styled-date.slate {
+    margin-left: 10px;
+}
+
+.end_date .styled-date.slate{
+    margin-left: 16px;
+}
+
+.styled-date input {
+   background: transparent;
+   border: none;
+   font-size: 14px;
+   height: 29px;
+   padding: 5px; /* If you add too much padding here, the options won't show in IE */
+   width: 13vw;
+}
+
+.styled-date.slate {
+   background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
+   height: 34px;
+   width: 10vw;
+    color: #879094;
+    border: 1px solid #a8afb3;
+    padding-left: 10px;
+}
+
+

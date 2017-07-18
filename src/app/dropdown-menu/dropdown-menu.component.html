@@ -1,34 +1,38 @@
-<div>
-    <select id='transMenu' [(ngModel)] = "transType" (change) = "fillMenu('trans')" *ngIf='graphLevel<3'>
+<div style="margin-top: 1%">
+    <select class="styled-select slate" id='transMenu' [(ngModel)] = "transType" (change) = "fillMenu('trans')" *ngIf='graphLevel<3'>
         <option value=''>Select transaction type</option>
         <option *ngFor="let value of transTypes; let i = index" [value]="value">{{value | toOther}} ({{typeCount['transaction-type'][value]}})</option>
     </select>
 
-    <select id='provinceMenu' [(ngModel)] = "province" (change) = "fillMenu('province')" *ngIf='graphLevel<2'>
+    <select class="styled-select slate" id='provinceMenu' [(ngModel)] = "province" (change) = "fillMenu('province')" *ngIf='graphLevel<2'>
         <option value=''>Select province</option>
         <option *ngFor="let value of provinces; let i = index" [value]="value">{{value | toOther}} ({{typeCount['location.province'][value]}})</option>
     </select>
 
-    <select id='countyMenu' [(ngModel)] = "county" (change) = "fillMenu('county')" *ngIf='graphLevel<1'>
+    <select class="styled-select slate" id='countyMenu' [(ngModel)] = "county" (change) = "fillMenu('county')" *ngIf='graphLevel<1'>
         <option value=''>Select county</option>
         <option *ngFor="let value of countys; let i = index" [value]="value">{{value | toOther}} ({{typeCount['location.county'][value]}})</option>
     </select>
 
-    <select id='wardMenu' [(ngModel)] = "ward" (change) = "fillMenu('ward')" *ngIf='graphLevel<1'>
+    <select class="styled-select slate" id='wardMenu' [(ngModel)] = "ward" (change) = "fillMenu('ward')" *ngIf='graphLevel<1'>
         <option value=''>Select ward</option>
         <option *ngFor="let value of wards; let i = index" [value]="value">{{value | toOther}} ({{typeCount['location.ward'][value]}})</option>
     </select>
 
-    <ss-multiselect-dropdown [options]="myOptions" [settings]='mySettings' [texts]='myTexts'[(ngModel)]="optionsModel" *ngIf="haveHType" (ngModelChange)="setHasChanged(true)"></ss-multiselect-dropdown>
-    <div>
-        <label>Start date</label>
-        <input type="date" id='startDate' [(ngModel)] = "startDate" (click) = "setHasChanged(true)">
+    <ss-multiselect-dropdown [options]="myOptions" [settings]='mySettings' [texts]='myTexts'[(ngModel)]="optionsModel" *ngIf="haveHType" (ngModelChange)="setHasChanged(true)" class="house_type"></ss-multiselect-dropdown>
+
+    <div class="date">
+        <div class="start_date">
+            <label>Start date</label>
+            <input type="date" id='startDate' [(ngModel)] = "startDate" (click) = "setHasChanged(true)" class="styled-date slate">
+        </div>
+        <div class="end_date">
+            <label>End date</label>
+            <input type="date" id='endDate' [(ngModel)] = "endDate" (click) = "setHasChanged(true)" class="styled-date slate">
+        </div>
     </div>
-    <div>
-        <label>End date</label>
-        <input type="date" id='endDate' [(ngModel)] = "endDate" (click) = "setHasChanged(true)">
-    </div>
-    <div *ngIf='hasDateStep'>
+
+    <div *ngIf='hasDateStep' class="date_step">
         <label>Date step</label>
         <input type="number" [(ngModel)]= "dateStep" (change) = "setHasChanged(true)" min=1>
     </div>

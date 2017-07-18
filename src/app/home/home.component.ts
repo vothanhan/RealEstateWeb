@@ -110,6 +110,11 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.drawMap(false)
   }
+  
+  chooseGraph(id){
+    console.log(id);
+  }
+
   // Draw graph according to button
   processButton(){
     this.isLong = false;

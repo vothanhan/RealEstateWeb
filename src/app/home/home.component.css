@@ -1,8 +1,147 @@
+#graphMenu {
+display: block;
+}
+
 #chartdiv {
-  width: 100%;
-  height: 700px;
+  margin: auto;
+  width: 96%;
+  height: 66vh;
 }
 
 #chartdiv.isLong{
-    height:1000px;
+  height:1000px;
 } 
+
+div.scrollmenu {
+  text-align: center;
+  overflow: auto;
+  white-space: nowrap;
+  border-bottom: solid 3px #ececec;
+  box-shadow: 0px 5px 20px -4px rgba(0, 0, 0, 0.3);
+  color: #bbbfc2;
+}
+
+div.col-sm-1:hover {
+  background-color: #777;
+  border-radius: 8%;
+  cursor: pointer;
+  color: white;
+}
+
+div.col-sm-1:active {
+  background-color: #777;
+  border-radius: 8%;
+  cursor: pointer;
+}
+
+div.scrollmenu img{
+  width: 70%;
+  margin: auto 4% auto 4%;
+}
+
+div.chart {
+  display: inline;
+}
+
+/* CSS for specific elements*/
+
+#itemDensity img{
+  margin-left: 5%;
+}
+
+div.graphContent {
+  display: inline;
+}
+
+div.col-sm-1 {
+  margin: 0.2% 4% 0.4% 4%;
+  float: none;
+  display: inline-block;
+  
+}
+
+div.row {
+  margin: auto;
+}
+
+button.enjoy-css {
+   margin: 10px auto 10px 6%;
+}
+
+div.text {
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 5%;
+  color: #b2b5ba;
+}
+
+.enjoy-css {
+  display: inline-block;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  width: 8%;
+  height: 32px;
+  position: relative;
+  cursor: pointer;
+  top: 0;
+  padding: 0 25.600000381469727px;
+  border: 1px solid rgb(225,225,225);
+  font: normal normal 300 15px/32px "Electrolize", Helvetica, sans-serif;
+  color: rgb(102, 102, 102);
+  text-align: center;
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  background: -webkit-linear-gradient(0deg, rgb(243,243,243) 0, rgb(233,233,233) 100%), rgb(238, 238, 238);
+  background: -moz-linear-gradient(90deg, rgb(243,243,243) 0, rgb(233,233,233) 100%), rgb(238, 238, 238);
+  background: linear-gradient(90deg, rgb(243,243,243) 0, rgb(233,233,233) 100%), rgb(238, 238, 238);
+  -webkit-background-origin: padding-box;
+  background-origin: padding-box;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-background-size: auto auto;
+  background-size: auto auto;
+  -webkit-box-shadow: 0 1px 0 0 rgba(255,255,255,0.298039) inset, 0 -1px 1px 0 rgba(255,255,255,0.14902) inset, 0 7px 0 0 rgb(187,187,187) , 0 8px 3px 0 rgba(0,0,0,0.2) ;
+  box-shadow: 0 1px 0 0 rgba(255,255,255,0.298039) inset, 0 -1px 1px 0 rgba(255,255,255,0.14902) inset, 0 7px 0 0 rgb(187,187,187) , 0 8px 3px 0 rgba(0,0,0,0.2) ;
+  -webkit-transition: all 0.1s cubic-bezier(0.25, 0.25, 0.75, 0.75);
+  -moz-transition: all 0.1s cubic-bezier(0.25, 0.25, 0.75, 0.75);
+  -o-transition: all 0.1s cubic-bezier(0.25, 0.25, 0.75, 0.75);
+  transition: all 0.1s cubic-bezier(0.25, 0.25, 0.75, 0.75);
+}
+
+.enjoy-css:hover {
+  color: rgba(135,135,135,1);
+  background: -webkit-linear-gradient(-90deg, rgb(255,255,255) 0, rgb(235,235,235) 100%), -webkit-linear-gradient(0deg, rgb(243,243,243) 0, rgb(233,233,233) 100%), rgb(238, 238, 238);
+  background: -moz-linear-gradient(180deg, rgb(255,255,255) 0, rgb(235,235,235) 100%), -moz-linear-gradient(90deg, rgb(243,243,243) 0, rgb(233,233,233) 100%), rgb(238, 238, 238);
+  background: linear-gradient(180deg, rgb(255,255,255) 0, rgb(235,235,235) 100%), linear-gradient(90deg, rgb(243,243,243) 0, rgb(233,233,233) 100%), rgb(238, 238, 238);
+  -webkit-background-origin: padding-box;
+  background-origin: padding-box;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-background-size: auto auto;
+  background-size: auto auto;
+}
+
+.enjoy-css:active {
+  top: 6px;
+  color: rgba(160,160,160,1);
+  background: -webkit-linear-gradient(-90deg, rgb(255,255,255) 0, rgb(235,235,235) 100%), rgb(255, 255, 255);
+  background: -moz-linear-gradient(180deg, rgb(255,255,255) 0, rgb(235,235,235) 100%), rgb(255, 255, 255);
+  background: linear-gradient(180deg, rgb(255,255,255) 0, rgb(235,235,235) 100%), rgb(255, 255, 255);
+  -webkit-background-origin: padding-box;
+  background-origin: padding-box;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-background-size: auto auto;
+  background-size: auto auto;
+  -webkit-box-shadow: 0 1px 0 0 rgba(255,255,255,0.298039) inset, 0 -1px 1px 0 rgba(255,255,255,0.14902) inset;
+  box-shadow: 0 1px 0 0 rgba(255,255,255,0.298039) inset, 0 -1px 1px 0 rgba(255,255,255,0.14902) inset;
+  -webkit-transition: all 50ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
+  -moz-transition: all 50ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
+  -o-transition: all 50ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
+  transition: all 50ms cubic-bezier(0.25, 0.25, 0.75, 0.75);
+}
+
+.chartdiv .amcharts-main-div .amcharts-chart-div a{
+  display: none;
+}
