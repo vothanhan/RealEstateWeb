@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit {
     "predictPrice":0
 
   }
-
+  graphName:string = "";
   isLong : boolean;
   map : any;
   mapObject : any;
@@ -118,6 +118,7 @@ export class HomeComponent implements OnInit {
 
   // Draw graph according to button
   processButton(){
+    this.createGraphTitle();
     this.isLong = false;
     this.menuComponent.setHasChanged(false);  // make button disabled if graph is not change, to not rerender the same graph
     this.isRender=true;
@@ -129,8 +130,8 @@ export class HomeComponent implements OnInit {
       this.drawItemCountGraph();  
     }
     else if (this.graphType == 'priceAverage' ){
-      if(this.menuComponent.isTransAndHouseSet()==false){
-        alert("Must select transaction type and house type!");
+      if(this.menuComponent.isTransAndHouseSet()==false && this.menuComponent.province!=""){
+        alert("Must select transaction type, house type, and province!");
         this.processActive=true;
       }
       else{
@@ -139,7 +140,13 @@ export class HomeComponent implements OnInit {
       }
     }
     else if (this.graphType == 'meanPrice'){
-      this.drawMedianPrice();
+      if(this.menuComponent.isTransAndHouseSet()==false && this.menuComponent.province!=""){
+        alert("Must select transaction type, house type, and province!");
+        this.processActive=true;
+      }
+      else{
+        this.drawMedianPrice();
+      }
     }
     else if (this.graphType == 'postPerDay'){
       this.drawUploadTendency();
@@ -160,7 +167,7 @@ export class HomeComponent implements OnInit {
 
   graphChange (){
     this.processActive=true;
-
+    
     this.isNotPredict= this.graphType != "predictPrice";
     this.menuComponent.setLevel(this.graphLevel[this.graphType]);
     if(this.graphType == 'hTypePercent'){
@@ -177,17 +184,82 @@ export class HomeComponent implements OnInit {
     }
     this.menuComponent.resetSelection(this.graphLevel[this.graphType]);
   }
-
+  toTitleCase(val){
+    let value= val.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    return value
+  }
+  createGraphTitle(){
+    let graphTitle=this.toTitleCase(this.menuComponent.ward);
+    if (this.menuComponent.ward!=''){
+      graphTitle+=', '
+    }
+    graphTitle+=this.toTitleCase(this.menuComponent.county);
+    if (this.menuComponent.county!=''){
+      graphTitle+=', ';
+    }
+    graphTitle+=this.toTitleCase(this.menuComponent.province);
+    let graphName="";
+    switch(this.graphType){
+      case "priceDistribute":
+        graphName="Price distribution of ";
+        break
+      case "itemDensityGraph":
+        graphName="Graph of Listings distribution of "
+        break
+      case"priceProb":
+        graphName="Price's Density probability of "
+        break
+      case "itemDensity":
+        graphName="Map of Listings distribution of ";
+        break
+      case "priceAverage":
+        graphName="Map of average price of ";
+        break
+      case "meanPrice": 
+        graphName="Graph of median price of "
+        break
+      case "postPerDay": 
+        graphName="Posting trend"
+        break
+      case "hTypePercent":
+        graphName="Real estate by type of "
+        break
+      case "priceTrend":
+        graphName="Price trend of "
+        break
+      case "boxPlotPrice":
+        graphName="Boxplot of "
+        break
+      case "predictPrice":
+        graphName = "Price Prediction of "
+        break
+      }
+    graphName+=this.menuComponent.getSelected().split(";").join("/");
+    if(this.menuComponent.getSelected().split(";").length>1){
+      graphName=graphName.slice(0,-1);
+    }
+    else{
+      graphName=graphName.slice(0,-4);
+    }
+    let timeString="";
+    if (this.menuComponent.startDate!=""){
+      timeString+=" from "+this.menuComponent.startDate;
+    }
+    if (this.menuComponent.endDate!=""){
+      timeString+=" to "+this.menuComponent.endDate;
+    }
+    this.graphName=  graphName+ " in " +graphTitle+timeString
+  }
 
   drawItemCountGraph () {
     let vm=this;
     let count1=0;
     let dataProviders = { };
     let mapName = '';
+    
     if (vm.graphType == 'itemDensityGraph'){
       this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, 5)
       .subscribe( res => {
-        console.log(res['data'])
         let dataProvider=res['data'];
         dataProvider.forEach((item) => {
           item['_id']=item['_id'].replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})

@@ -62,7 +62,7 @@ export class DropdownMenuComponent implements OnInit {
 
 
   isTransAndHouseSet(){
-    return this.transType!='' && this.htype!='';
+    return this.transType!='' && this.optionsModel.length>0;
   }
 
   setHasChanged(val){
