@@ -21,18 +21,15 @@ div.scrollmenu {
   color: #bbbfc2;
 }
 
-div.col-sm-1:hover {
+div.col-sm-1:hover,
+div.col-sm-1:focus {
   background-color: #777;
   border-radius: 8%;
   cursor: pointer;
   color: white;
 }
 
-div.col-sm-1:active {
-  background-color: #777;
-  border-radius: 8%;
-  cursor: pointer;
-}
+
 
 div.scrollmenu img{
   width: 70%;
@@ -144,4 +141,9 @@ div.text {
 
 .chartdiv .amcharts-main-div .amcharts-chart-div a{
   display: none;
+}
+
+div.graphDescription{
+  text-align: center;
+  font-weight: bold;
 }

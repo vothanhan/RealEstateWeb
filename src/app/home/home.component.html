@@ -69,5 +69,6 @@
         </div>
 
     <div id="chartdiv" [ngClass]="{'isLong':isLong}" *ngIf="isNotPredict"></div>
+    <div class="graphDescription">{{graphName}}</div>
     <div id="textDiv" *ngIf="!isNotPredict">{{predictInfo}}</div>
 </div>

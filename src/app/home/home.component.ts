@@ -98,6 +98,7 @@ export class HomeComponent implements OnInit {
   processActive : boolean = true;
   isNotPredict : boolean = true;
   predictInfo:any;
+  graphName: any;
 
   @ViewChild(DropdownMenuComponent)
 
