@@ -214,6 +214,13 @@ router.get('/countpost',(req,res) => {
         }
         query.push({"$match":{"house-type":{"$in":htype}}});
     }
+    if (params.website!=undefined && params.website !=''){
+        var website=params.website.split(';');
+        if(website.length>1){
+            website.splice(-1,1);
+        }
+        query.push({"$match":{"website":{"$in":website}}});
+    }
     matchDate={};
     hasDate=false;
     if(params.startDate!='' && params.startDate != undefined){

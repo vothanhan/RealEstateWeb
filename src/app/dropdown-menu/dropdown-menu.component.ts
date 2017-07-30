@@ -45,7 +45,10 @@ export class DropdownMenuComponent implements OnInit {
   dateStep : number=1;
   hasDateStep : boolean=false;
   optionsModel: number[]=[];
+  sourceModel: number[]=[];
+  haveWebsite: boolean = false;
   myOptions: IMultiSelectOption[];
+  sourceOptions: IMultiSelectOption[];
   mySettings: IMultiSelectSettings = {
   };
   myTexts: IMultiSelectTexts={};
@@ -72,13 +75,20 @@ export class DropdownMenuComponent implements OnInit {
   loadMenu(){
       this.transTypes = Object.keys(this.menu_json['menu']);
       this.htypes = this.menu_json['house_type'];
-      let arr=[];
+      let arr = [];
+      let websiteArr = [];
       let index=0;
       this.htypes.forEach((item)=>{
         arr.push({"id":index,"name":item});
         index+=1;
       })
+      index=0;
+      this.menu_json['website'].forEach((item)=>{
+        websiteArr.push({"id":index,"name":item});
+        index+=1
+      });
       this.myOptions=arr;
+      this.sourceOptions=websiteArr;
       this.htype = '';
       this.changeCount('all');
   }
@@ -196,6 +206,13 @@ export class DropdownMenuComponent implements OnInit {
     let ret=''
     this.optionsModel.forEach((item)=>{
       ret+=this.myOptions[item]['name']+";";
+    })
+    return ret;
+  }
+  getWebsiteSelected(){
+    let ret=''
+    this.sourceModel.forEach((item)=>{
+      ret+=this.sourceOptions[item]['name']+";";
     })
     return ret;
   }
