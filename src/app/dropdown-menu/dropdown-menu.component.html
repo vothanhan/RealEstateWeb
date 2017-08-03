@@ -20,9 +20,9 @@
     </select>
 
     <ss-multiselect-dropdown [options]="myOptions" [settings]='mySettings' [texts]='myTexts'[(ngModel)]="optionsModel" *ngIf="haveHType" (ngModelChange)="setHasChanged(true)" class="house_type"></ss-multiselect-dropdown>
-    <div> 
+    <!-- <div> 
         <ss-multiselect-dropdown [options]="sourceOptions" [settings]='mySettings' [texts]='myTexts'[(ngModel)]="sourceModel" *ngIf="haveWebsite" (ngModelChange)="setHasChanged(true)" class="website"></ss-multiselect-dropdown>
-    </div>
+    </div> -->
 
     <div class="date">
         <div class="start_date">

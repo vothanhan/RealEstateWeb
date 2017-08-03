@@ -171,6 +171,7 @@ export class HomeComponent implements OnInit {
     this.menuComponent.haveWebsite=false;
     this.isNotPredict= this.graphType != "predictPrice";
     this.menuComponent.setLevel(this.graphLevel[this.graphType]);
+    this.createGraphTitle();
     if(this.graphType == 'hTypePercent'){
       this.menuComponent.haveHType = false;
     }
@@ -226,7 +227,7 @@ export class HomeComponent implements OnInit {
         graphName="Graph of median price of "
         break
       case "postPerDay": 
-        graphName="Posting trend"
+        graphName="Posting trend of "
         break
       case "hTypePercent":
         graphName="Real estate by type of "
