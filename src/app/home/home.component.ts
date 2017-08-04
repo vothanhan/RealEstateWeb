@@ -213,7 +213,7 @@ export class HomeComponent implements OnInit {
         break;
       }
       case "postPerDay": {
-        this.postPerDay = "cicked"
+        this.postPerDay = "clicked"
         this.previous_id = id;
         break;
       }
