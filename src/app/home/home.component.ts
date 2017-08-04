@@ -20,6 +20,17 @@ declare var science : any;
   providers: [ HouseService]
 })
 export class HomeComponent implements OnInit {
+  previous_id: string = "no";
+  itemDensity: string;
+  itemDensityGraph: string;
+  priceDistribute: string;
+  priceProb: string;
+  meanPrice: string;
+  boxPlotPrice: string;
+  postPerDay: string;
+  hTypePercent: string;
+  priceTrend: string;
+  predictPrice: string;
   graphType : string ;
   countyIDDict : object = {
     "Hoc Mon": "HCM-0",
@@ -112,6 +123,117 @@ export class HomeComponent implements OnInit {
   }
   
   chooseGraph(id){
+
+
+    if (this.previous_id != "no")
+      {
+        switch(this.previous_id){
+      case "itemDensity": {
+        console.log("FUCK YEAH");
+        this.itemDensity = "un_clicked";
+        break;
+      }
+      case "itemDensityGraph": {
+        this.itemDensityGraph = "un_clicked"
+        break;
+      }
+      case "priceDistribute": {
+        this.priceDistribute = "un_clicked";
+       
+        break;
+      }
+      case "priceProb": {
+        this.priceProb = "un_clicked"
+
+        break;
+      }
+      case "meanPrice": {
+        this.meanPrice = "un_clicked"
+             
+        break;
+      }
+      case "boxPlotPrice": {
+        this.boxPlotPrice = "un_clicked"
+          
+        break;
+      }
+      case "postPerDay": {
+        this.postPerDay = "un_clicked"
+ 
+        break;
+      }
+      case "hTypePercent": {
+        this.hTypePercent = "un_clicked"
+    
+        break;
+      }
+      case "priceTrend": {
+        this.priceTrend = "un_clicked"
+      
+        break;
+      }
+      case "predictPrice": {
+        this.predictPrice = "un_clicked"
+     
+        break;
+      }
+    }
+      }
+
+
+    switch(id){
+      case "itemDensity": {
+        this.itemDensity = "clicked";
+        this.previous_id = id;
+        break;
+      }
+      case "itemDensityGraph": {
+        this.itemDensityGraph = "clicked"
+        this.previous_id = id;
+        break;
+      }
+      case "priceDistribute": {
+        this.priceDistribute = "clicked";
+        this.previous_id = id;
+        break;
+      }
+      case "priceProb": {
+        this.priceProb = "clicked"
+        this.previous_id = id;
+        break;
+      }
+      case "meanPrice": {
+        this.meanPrice = "clicked"
+        this.previous_id = id;
+        break;
+      }
+      case "boxPlotPrice": {
+        this.boxPlotPrice = "clicked"
+        this.previous_id = id;
+        break;
+      }
+      case "postPerDay": {
+        this.postPerDay = "cicked"
+        this.previous_id = id;
+        break;
+      }
+      case "hTypePercent": {
+        this.hTypePercent = "clicked"
+        this.previous_id = id;
+        break;
+      }
+      case "priceTrend": {
+        this.priceTrend = "clicked"
+        this.previous_id = id;
+        break;
+      }
+      case "predictPrice": {
+        this.predictPrice = "clicked"
+        this.previous_id = id;
+        break;
+      }
+    }
+
     this.graphType=id;
     this.graphChange();
   }
