@@ -1190,9 +1190,18 @@ export class HomeComponent implements OnInit {
           }
           else{
             let quartiles=this.getQuartile(showData[showData.length-1]['list']);
-            showData[showData.length-1]['firstQuartile'] = quartiles['fQ'];
-            showData[showData.length-1]['thirdQuartile'] = quartiles['tQ'];
-            showData[showData.length-1]['median'] = quartiles['median'];
+            if(showData[showData.length-1]['count']>15 || showData.length == 1){
+              showData[showData.length-1]['firstQuartile'] = quartiles['fQ'];
+              showData[showData.length-1]['thirdQuartile'] = quartiles['tQ'];
+              showData[showData.length-1]['median'] = quartiles['median'];
+            }
+            else{
+              let currDate       = showData[showData.length-1]['date'];
+              let currDateString = showData[showData.length-1]['dateString'];
+              showData[showData.length-1]=showData[showData.length-2];
+              showData['date']=currDate;
+              showData['dateString']=currDateString;
+            }
             if(date==nextDate){
               showData.push(timeData[i]);
               showData[showData.length-1]['dateString']=showData[showData.length-1]['dateString'].split('-').reverse().join("-");
