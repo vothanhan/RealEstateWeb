@@ -20,6 +20,7 @@ declare var science : any;
   providers: [ HouseService]
 })
 export class HomeComponent implements OnInit {
+  chartHeight: string;
   previous_id: string = "no";
   itemDensity: string;
   itemDensityGraph: string;
@@ -124,7 +125,6 @@ export class HomeComponent implements OnInit {
   
   chooseGraph(id){
 
-
     if (this.previous_id != "no")
       {
         switch(this.previous_id){
@@ -183,46 +183,55 @@ export class HomeComponent implements OnInit {
 
     switch(id){
       case "itemDensity": {
+        this.chartHeight = "65vh";
         this.itemDensity = "clicked";
         this.previous_id = id;
         break;
       }
       case "itemDensityGraph": {
+           this.chartHeight = "65vh";
         this.itemDensityGraph = "clicked"
         this.previous_id = id;
         break;
       }
       case "priceDistribute": {
+        this.chartHeight = "65vh";
         this.priceDistribute = "clicked";
         this.previous_id = id;
         break;
       }
       case "priceProb": {
+        this.chartHeight = "65vh";
         this.priceProb = "clicked"
         this.previous_id = id;
         break;
       }
       case "meanPrice": {
+        this.chartHeight = "65vh";
         this.meanPrice = "clicked"
         this.previous_id = id;
         break;
       }
       case "boxPlotPrice": {
+        this.chartHeight = "65vh";
         this.boxPlotPrice = "clicked"
         this.previous_id = id;
         break;
       }
       case "postPerDay": {
+        this.chartHeight = "62vh";
         this.postPerDay = "clicked"
         this.previous_id = id;
         break;
       }
       case "hTypePercent": {
+        this.chartHeight = "65vh";
         this.hTypePercent = "clicked"
         this.previous_id = id;
         break;
       }
       case "priceTrend": {
+        this.chartHeight = "62vh";
         this.priceTrend = "clicked"
         this.previous_id = id;
         break;

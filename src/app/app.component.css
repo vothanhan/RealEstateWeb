@@ -1,13 +1,13 @@
 header {
     background: linear-gradient(135deg, #a5baae 0%,#77968c 29%,#60847d 50%,#486c6d 69%,#2e525b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    height: 10vh;
+    height: 9vh;
 }
 
 header h1{
 background: linear-gradient(90deg,  #b66123 0%,#b56a27 29%,#bf7b2a 43%,#bd8759 69%,#b38734 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 -webkit-background-clip: text;
 -webkit-text-fill-color: transparent;
-padding: 2.5vh;
+padding: 2vh;
 margin: auto;
 }
 
