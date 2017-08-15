@@ -1,6 +1,10 @@
+@font-face {
+    font-family: oneDay;
+    src: url("/assets/fonts/ONEDAY.ttf")
+}
+
 header {
-    background: linear-gradient(135deg, #a5baae 0%,#77968c 29%,#60847d 50%,#486c6d 69%,#2e525b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    height: 9vh;
+ background: linear-gradient(-90deg, #a5baae 0%,#77968c 29%,#60847d 50%,#486c6d 69%,#2e525b 100%); 
 }
 
 header h1{
@@ -11,3 +15,29 @@ padding: 2vh;
 margin: auto;
 }
 
+div.logo, img{
+    width: 6%;
+    padding: 6px;
+    margin-left: 2%;
+}
+
+div.logo {
+    display: inline;
+}
+
+div.slogan {
+   margin-left: 2%;
+    font-family: oneDay;
+    display: inline;
+    font-size: 30px;
+   background: rgba(217,175,91,1);
+background: -moz-linear-gradient(left, rgba(217,175,91,1) 0%, rgba(234,197,110,1) 38%, rgba(244,211,128,1) 67%, rgba(249,217,138,1) 100%);
+background: -webkit-gradient(left top, right top, color-stop(0%, rgba(217,175,91,1)), color-stop(38%, rgba(234,197,110,1)), color-stop(67%, rgba(244,211,128,1)), color-stop(100%, rgba(249,217,138,1)));
+background: -webkit-linear-gradient(left, rgba(217,175,91,1) 0%, rgba(234,197,110,1) 38%, rgba(244,211,128,1) 67%, rgba(249,217,138,1) 100%);
+background: -o-linear-gradient(left, rgba(217,175,91,1) 0%, rgba(234,197,110,1) 38%, rgba(244,211,128,1) 67%, rgba(249,217,138,1) 100%);
+background: -ms-linear-gradient(left, rgba(217,175,91,1) 0%, rgba(234,197,110,1) 38%, rgba(244,211,128,1) 67%, rgba(249,217,138,1) 100%);
+background: linear-gradient(to right, rgba(217,175,91,1) 0%, rgba(234,197,110,1) 38%, rgba(244,211,128,1) 67%, rgba(249,217,138,1) 100%);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

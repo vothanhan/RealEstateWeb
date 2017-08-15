@@ -38,6 +38,10 @@
                 <img src="assets/images/graph-9.png">
                 <div class="graphName"> Price Trend</div>
         </div>
+        <div class="col-sm-1" id="priceScatter" (click)="chooseGraph('priceScatter')" [ngClass]="priceScatter">
+                <img src="assets/images/graph-10.png">
+                <div class="graphName"> Price Scatter</div>
+        </div>
         <div class="col-sm-1" id="predictPrice" (click)="chooseGraph('predictPrice')" [ngClass]="predictPrice">
                 <img src="assets/images/graph-11.png">
                 <div class="graphName"> Price Prediction</div>

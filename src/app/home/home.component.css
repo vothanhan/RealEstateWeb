@@ -5,7 +5,10 @@ display: block;
 #chartdiv {
   margin: auto;
   width: 95%;
-  /* height: 62vh; */
+  height: 62vh; 
+  background-image: url("/assets/images/background.png");
+  background-repeat:   no-repeat;
+  background-position: center center;       
 }
 
 #chartdiv.isLong{
@@ -59,7 +62,7 @@ div.graphContent {
 }
 
 div.col-sm-1 {
-  margin: 0.2% 4% 0.4% 4%;
+  margin: 0.2% 4% 0.2% 4%;
   float: none;
   display: inline-block;
   
