@@ -3,6 +3,10 @@ div.date {
     margin-right: 5%;
 }
 
+#wardMenu {
+    width: 11vw;
+}
+
 select {
     margin: auto 1% auto 1%;
 }
@@ -58,10 +62,12 @@ select {
 
 .start_date .styled-date.slate {
     margin-left: 10px;
+    color: #5ba9dd;
 }
 
 .end_date .styled-date.slate{
     margin-left: 16px;
+    color: #5ba9dd;
 }
 
 .styled-date input {
