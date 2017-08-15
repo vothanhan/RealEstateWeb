@@ -18,8 +18,11 @@
         <option value=''>Select ward</option>
         <option *ngFor="let value of wards; let i = index" [value]="value">{{value | toOther}} ({{typeCount['location.ward'][value]}})</option>
     </select>
-
-    <ss-multiselect-dropdown [options]="myOptions" [settings]='mySettings' [texts]='myTexts'[(ngModel)]="optionsModel" *ngIf="haveHType" (ngModelChange)="setHasChanged(true)" class="house_type"></ss-multiselect-dropdown>
+    <select class="styled-select slate" id='wardMenu' [(ngModel)] = "project" *ngIf='haveApart'>
+        <option value=''>Select project</option>
+        <option *ngFor="let value of projects; let i = index" [value]="value">{{value | toOther}} </option>
+    </select>
+    <ss-multiselect-dropdown [options]="myOptions" [settings]='mySettings' (change) = 'checkApartment()' [texts]='myTexts'[(ngModel)]="optionsModel" *ngIf="haveHType" (ngModelChange)="setHasChanged(true)" class="house_type"></ss-multiselect-dropdown>
     <!-- <div> 
         <ss-multiselect-dropdown [options]="sourceOptions" [settings]='mySettings' [texts]='myTexts'[(ngModel)]="sourceModel" *ngIf="haveWebsite" (ngModelChange)="setHasChanged(true)" class="website"></ss-multiselect-dropdown>
     </div> -->

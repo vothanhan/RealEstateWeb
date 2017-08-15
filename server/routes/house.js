@@ -45,6 +45,9 @@ router.get('/', (req,res) => {
     if(params.endDate!='' && params.endDate != undefined){
         query.where("post-time.date").lte(new Date(params.endDate));
     }
+    if (params.project != '' && params.project != undefined){
+        query.where('project').equals(params.project);
+    }
     query.select('price area');
     query.exec((err,houses) => {
         response={}
@@ -94,6 +97,9 @@ router.get('/count', (req,res) => {
     if(params.endDate!='' && params.endDate != undefined){
         query.where("post-time.date").lte(new Date(params.endDate));
     }
+    if (params.project != '' && params.project != undefined){
+        query.where('project').equals(params.project);
+    }
     query.exec((err,count) => {
         response={}
         if (err){
@@ -142,8 +148,10 @@ router.get("/aggregate",(req, res) =>{
     }
 
     if(params.transtype!='' && params.transtype!=undefined ){
-        
         query.push({"$match":{"transaction-type":params.transtype}});
+    }
+    if (params.project != '' && params.project != undefined){
+        query.push({'$match':{'project':params.project}});
     }
     query.push({"$group":{"_id":groupBy,"count": {"$sum": 1}}});
     House.aggregate(query,(err,house) => {
@@ -155,6 +163,7 @@ router.get("/aggregate",(req, res) =>{
         }
     });
 });
+
 
 router.get("/htypepercent", (req, res) =>{
     params= req.query;
@@ -185,6 +194,9 @@ router.get("/htypepercent", (req, res) =>{
     if(params.transtype!='' && params.transtype!=undefined ){
         
         query.push({"$match":{"transaction-type":params.transtype}});
+    }
+    if (params.project != '' && params.project != undefined){
+        query.push({'$match':{'project':params.project}});
     }
     query.push({"$group":{"_id":"$house-type","count": {"$sum": 1}}});
     House.aggregate(query,(err,house) => {
@@ -237,6 +249,9 @@ router.get('/countpost',(req,res) => {
     if(params.transtype!='' && params.transtype!=undefined ){
         query.push({"$match":{"transaction-type":params.transtype}});
     }
+    if (params.project != '' && params.project != undefined){
+        query.push({'$match':{'project':params.project}});
+    }
     query.push({"$group":{"_id":groupBy,"count": {"$sum": 1}}});
     House.aggregate(query,(err,house) => {
         if(err){
@@ -277,6 +292,9 @@ router.get('/trendprice', (req,res) => {
     }
     if(params.transtype!='' && params.transtype!=undefined ){
         query.where('transaction-type').equals(params.transtype);
+    }
+    if (params.project != '' && params.project != undefined){
+        query.where('project').equals(params.project);
     }
     query.select("post-time.date price");
     query.exec((err, houses) =>{
@@ -351,6 +369,9 @@ router.get('/average', (req,res) => {
     }
     if(params.transtype!='' && params.transtype!=undefined ){
         query.where('transaction-type').equals(params.transtype);
+    }
+    if (params.project != '' && params.project != undefined){
+        query.where('project').equals(params.project);
     }
     query.select('price location');
     query.sort('price');
@@ -494,6 +515,9 @@ router.get('/countmenu', (req,res) =>{
     if(params.transtype!='' && params.transtype!=undefined ){
         
         query.push({"$match":{"transaction-type":params.transtype}});
+    }
+    if (params.project != '' && params.project != undefined){
+        query.push({'$match':{'project':params.project}});
     }
     query.push({"$group":{"_id":groupBy,"count": {"$sum": 1}}});
     House.aggregate(query,(err,house) => {

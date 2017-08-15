@@ -13,7 +13,7 @@ export class HouseService {
   constructor(private http: Http) { };
 
 
-  getHouse(houseType, province : string, county : string, ward : string, transtype: string, startDate: string, endDate: string, website:string, isCount : number): Observable<object>{
+  getHouse(houseType, province : string, county : string, ward : string, transtype: string, startDate: string, endDate: string, website:string, project: string, isCount : number): Observable<object>{
       let hv : string = houseType != '' && houseType != undefined ? 'htype='+houseType.replace(' ','%20'):'';
       let pv : string = province != '' && province != undefined ? '&province='+province.replace(' ','%20'):'';
       let cv : string = county != '' && county != undefined ? '&county='+county.replace(' ','%20'):'';
@@ -22,11 +22,13 @@ export class HouseService {
       let sd : string = startDate != '' && startDate!= undefined ? "&startDate="+startDate:"";
       let ed : string = endDate != '' && endDate!= undefined ? "&endDate="+endDate:"";
       let we : string = website != '' && website!= undefined ? "&website="+website:"";
+      let pr : string = project != '' && project != undefined ? '&project='+project.replace(' ','%20'):'';
       tv = hv == '' ? tv.slice(1): tv;
       sd = hv == '' && tv == '' ? sd.slice(1):sd;             
       ed = hv == '' && tv == '' && sd == '' ? ed.slice(1):ed;
       we = hv == '' && tv == '' && sd == '' && ed == '' ? we.slice(1) : we;
-      let qmark : string = hv != '' || pv != '' || tv !='' || sd !='' || ed !='' || we != '' ? '?' : '';
+      pr = hv == '' && tv == '' && sd == '' && ed == '' && we =='' ? pr.slice(1) : pr;
+      let qmark : string = hv != '' || pv != '' || tv !='' || sd !='' || ed !='' || we != '' || pr != '' ? '?' : '';
       let apiName : string ;
       switch(isCount){
         case 1: 
@@ -51,11 +53,10 @@ export class HouseService {
           apiName="";
       }
 
-      return this.http.get('/api/house'+apiName+qmark+hv+tv+pv+cv+wv+sd+ed+we).map((response: Response) =>{
+      return this.http.get('/api/house'+apiName+qmark+hv+tv+pv+cv+wv+sd+ed+we+pr).map((response: Response) =>{
           return response.json()
       }).catch(this.handleError)
   }
-
 
   getCountMenu(houseType, province : string, county : string, transtype: string, startDate: string, endDate: string, groupBy: string) : Observable<object>{
     let hv : string = houseType != '' && houseType != undefined ? 'htype='+houseType.replace(' ','%20'):'';

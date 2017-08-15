@@ -397,7 +397,9 @@ export class HomeComponent implements OnInit {
     let mapName = '';
     
     if (vm.graphType == 'itemDensityGraph'){
-      this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(), 5)
+      this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, 
+        this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,
+        this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 5)
       .subscribe( res => {
         let dataProvider=res['data'];
         dataProvider.forEach((item) => {
@@ -456,7 +458,9 @@ export class HomeComponent implements OnInit {
         province = "ho chi minh";
         dataProviders=vm.hcmDataProviders;
       }
-      this.houseService.getHouse(this.menuComponent.getSelected(), province, this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(), 5)
+      this.houseService.getHouse(this.menuComponent.getSelected(), province, 
+        this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,
+        this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(), this.menuComponent.project, 5)
       .subscribe( res => {
         if(res['err']==true){
           return
@@ -503,7 +507,7 @@ export class HomeComponent implements OnInit {
 
     
     this.houseService.getHouse(this.menuComponent.getSelected(), province, "", '', this.menuComponent.transType,
-      this.menuComponent.startDate,this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(), 2)
+      this.menuComponent.startDate,this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 2)
       .subscribe( res => {
         if (res['err']==true){
           return;
@@ -583,7 +587,8 @@ export class HomeComponent implements OnInit {
 
   drawDistributeGraph(){
     this.houseService.getHouse(this.menuComponent.getSelected(),this.menuComponent.province, this.menuComponent.county, 
-      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(), 0).subscribe( res => {
+      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,
+      this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 0).subscribe( res => {
         let priceDist : number[] =[];
         let min: number = res['data'].length > 0 ? res['data'][0]['price'] : 0 , max : number = 0;
         for(let i in res['data']){
@@ -795,7 +800,7 @@ export class HomeComponent implements OnInit {
     let vm = this;
 
     this.houseService.getHouse(this.menuComponent.getSelected(), province, '', '', this.menuComponent.transType,
-      this.menuComponent.startDate,this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(), 2)
+      this.menuComponent.startDate,this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 2)
           .subscribe( res => {
             if (res['err']==true){
               return;
@@ -971,7 +976,8 @@ export class HomeComponent implements OnInit {
   drawUploadTendency(){
 
     this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, this.menuComponent.county, 
-      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(), 6)
+      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,
+      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 6)
     .subscribe( res => {
       if(res['err']==true){
         return;
@@ -1108,7 +1114,8 @@ export class HomeComponent implements OnInit {
 
   drawHouseTypePieChart(){
     this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, this.menuComponent.county, 
-      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(), 3)
+      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,
+      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 3)
       .subscribe( res =>{
         if(res['err']==true){
           console.log("error");
@@ -1176,7 +1183,8 @@ export class HomeComponent implements OnInit {
   drawTrendOfPrice(){
     let dateStep=this.menuComponent.dateStep;
     this.houseService.getHouse(this.menuComponent.getSelected(),this.menuComponent.province, this.menuComponent.county, 
-      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(), 4).subscribe( res => {
+      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,
+      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 4).subscribe( res => {
         let timeData=res['data']
         
         if (res['err']==true){
@@ -1393,7 +1401,8 @@ export class HomeComponent implements OnInit {
 
   drawScatterPrice(){
     this.houseService.getHouse(this.menuComponent.getSelected(),this.menuComponent.province, this.menuComponent.county, 
-      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(), 0).subscribe( res => {
+      this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,
+      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 0).subscribe( res => {
         if(res['err']==true){
           return;
         }

@@ -23,6 +23,7 @@ export class DropdownMenuComponent implements OnInit {
   countys     : string[]=[];
   wards       : string[]=[];
   htypes      : string[]=[];
+  projects    : string[]=[];
   transType   : string = '';
   province    : string = '';
   county      : string = '';
@@ -30,6 +31,7 @@ export class DropdownMenuComponent implements OnInit {
   htype       : string = '';
   startDate   : string = '';
   endDate     : string = '';
+  project     : string = '';
   typeCount   : object = {};
   menuLevel   : object = {
     "all"      : 0,
@@ -51,6 +53,7 @@ export class DropdownMenuComponent implements OnInit {
   sourceOptions: IMultiSelectOption[];
   mySettings: IMultiSelectSettings = {
   };
+  haveApart: boolean;
   myTexts: IMultiSelectTexts={};
 
   constructor(private menuApiService : MenuApiService, private houseService : HouseService) { 
@@ -143,8 +146,18 @@ export class DropdownMenuComponent implements OnInit {
           this.ward = '';
       }
       this.changeCount(menu);
-  }
+      this.getCount(this.htype,this.province,this.county, this.transType,'project','projects');
+      this.checkApartment();
 
+  }
+  checkApartment(){
+    if (this.optionsModel.length == 1 && this.myOptions[this.optionsModel[0]]['name'] == 'Can ho chung cu'){
+      this.haveApart = true;
+    }
+    else{
+      this.haveApart = false;
+    }
+  }
   changeCount(menu){
     let level= this.menuLevel[menu]
     let data;
@@ -182,17 +195,17 @@ export class DropdownMenuComponent implements OnInit {
     let vm=this;
     this.houseService.getCountMenu(htype,province, county, transType,'','',arr).subscribe( res => {
       if(res['err']==false){
-        res['data'].forEach((item)=>{
-          if(target=='provinces'){
-              if (item['_id']== 'ha noi' || item['_id']=='ho chi minh')
-                this.typeCount[arr][item['_id']]=item['count'];
+        if (arr!='project'){
+          res['data'].forEach((item)=>{
+            if(target=='provinces'){
+                if (item['_id']== 'ha noi' || item['_id']=='ho chi minh')
+                  this.typeCount[arr][item['_id']]=item['count'];
+              }
+            else{
+              this.typeCount[arr][item['_id']]=item['count'];
             }
-          else{
-            this.typeCount[arr][item['_id']]=item['count'];
-          }
-        })
-        console.log(this.typeCount);
-        
+          })
+        }
         if (target!=''){
           let data = vm[target];
           if(target=='provinces'){
@@ -204,10 +217,6 @@ export class DropdownMenuComponent implements OnInit {
               data.push(item['_id']);
             })
           }
-          
-
-          console.log(vm[target]);
-          console.log(target);
         }
       }
       else{
