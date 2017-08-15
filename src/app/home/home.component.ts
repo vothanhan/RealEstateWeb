@@ -780,7 +780,6 @@ export class HomeComponent implements OnInit {
     var layout = {
       bargap: 0.05, 
       barmode: "overlay", 
-      title: "Price distribution", 
       xaxis: {title: "Price"}, 
       yaxis: {title: "Count"}
     }

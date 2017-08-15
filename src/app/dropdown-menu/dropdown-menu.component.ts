@@ -90,6 +90,7 @@ export class DropdownMenuComponent implements OnInit {
       this.myOptions=arr;
       this.sourceOptions=websiteArr;
       this.htype = '';
+      this.transTypes=[];
       this.changeCount('all');
   }
 
@@ -121,7 +122,8 @@ export class DropdownMenuComponent implements OnInit {
             this.provinces=[];
           }
           else
-            this.provinces = Object.keys(this.menu_json['menu'][this.transType]);
+            // this.provinces = Object.keys(this.menu_json['menu'][this.transType]);
+            this.provinces = [];
             this.countys = [];
             this.wards = [];
             this.province = ''
@@ -129,13 +131,15 @@ export class DropdownMenuComponent implements OnInit {
             this.ward = '';
       }
       else if (menu == 'province'){
-          this.countys = this.province != '' ? Object.keys(this.menu_json['menu'][this.transType][this.province]) : [];
+          // this.countys = this.province != '' ? Object.keys(this.menu_json['menu'][this.transType][this.province]) : [];
+          this.countys = [];
           this.wards = [];
           this.county = ''
           this.ward = '';
       }
       else if(menu == 'county'){
-          this.wards = this.county != '' ? Object.keys(this.menu_json['menu'][this.transType][this.province][this.county]) : [];
+          // this.wards = this.county != '' ? Object.keys(this.menu_json['menu'][this.transType][this.province][this.county]) : [];
+          this.wards= [];
           this.ward = '';
       }
       this.changeCount(menu);
@@ -143,62 +147,75 @@ export class DropdownMenuComponent implements OnInit {
 
   changeCount(menu){
     let level= this.menuLevel[menu]
+    let data;
     if (level <= 1){
       if (menu == 'all'){
         this.typeCount['transaction-type']=[];
-        for( let i = 0; i < this.transTypes.length; i++){
-          this.typeCount['transaction-type'][this.transTypes[i]]=0;
-        }
-        this.getCount('' , '', '', '','transaction-type');
-      }
-      if (menu == 'trans' || menu == 'all')
-      {
-        this.typeCount['house-type']=[];
-        for( let i = 0; i < this.htypes.length; i++){
-          this.typeCount['house-type'][this.htypes[i]]=0;
-        }
-        this.getCount('', '', '', this.transType,'house-type');
-      }
-    }
-    
-    
-    if (this.provinces.length>0 && level < 2){
-      this.typeCount['location.province']=[];
-      for( let i = 0; i < this.provinces.length; i++){
-        this.typeCount['location.province'][this.provinces[i]]=0;
-      }
-      this.getCount(this.htype,'', '', this.transType,'location.province');
-    }
-
-    if (this.countys.length>0 && level < 3){
-      this.typeCount['location.county']=[];
-      for( let i = 0; i < this.countys.length; i++){
-        this.typeCount['location.county'][this.countys[i]]=0;
+        this.getCount('' , '', '', '','transaction-type','transTypes');
         
       }
-      this.getCount(this.htype,this.province,"", this.transType,'location.county');
+      // if (menu == 'trans' || menu == 'all')
+      if (menu == 'trans')
+      {
+        this.typeCount['location.province']=[];
+        this.getCount('', '', '', this.transType,'location.province','provinces');
+      }
     }
 
-    if (this.wards.length>0 && level < 4){
-      this.typeCount['location.ward']=[];
-      for( let i = 0; i < this.wards.length; i++){
-        this.typeCount['location.ward'][this.wards[i]]=0;
-      }
-      this.getCount(this.htype,this.province, this.county, this.transType,'location.ward');
+    if (menu == 'province' && level < 3){
+      this.typeCount['location.county']=[];
+      this.getCount(this.htype,this.province, '', this.transType,'location.county','countys');
     }
+
+    if (menu == 'county' && this.countys.length>0 && level < 4){
+      this.typeCount['location.ward']=[];
+      this.getCount(this.htype,this.province,this.county, this.transType,'location.ward','wards');
+    }
+
+    // if (menu == 'ward' && this.wards.length>0 && level < 4){
+    //   this.typeCount['location.ward']=[];
+    //   // data =this.getCount(this.htype,this.province, this.county, this.transType,'location.ward',"wards");
+    // }
   }
 
-  getCount(htype, province, county, transType,arr){
+  getCount(htype, province, county, transType,arr,target){
+    let vm=this;
     this.houseService.getCountMenu(htype,province, county, transType,'','',arr).subscribe( res => {
       if(res['err']==false){
         res['data'].forEach((item)=>{
-          this.typeCount[arr][item['_id']]=item['count'];
+          if(target=='provinces'){
+              if (item['_id']== 'ha noi' || item['_id']=='ho chi minh')
+                this.typeCount[arr][item['_id']]=item['count'];
+            }
+          else{
+            this.typeCount[arr][item['_id']]=item['count'];
+          }
         })
+        console.log(this.typeCount);
+        
+        if (target!=''){
+          let data = vm[target];
+          if(target=='provinces'){
+            data.push('ha noi');
+            data.push('ho chi minh');
+          }
+          else{
+            res['data'].forEach((item)=>{
+              data.push(item['_id']);
+            })
+          }
+          
+
+          console.log(vm[target]);
+          console.log(target);
+        }
       }
       else{
         for(let key in this.typeCount[arr]){
-          this.typeCount[arr][key]=0;
+          // this.typeCount[arr][key]=0;
+
         }
+        return [];
       }
     });
   }
