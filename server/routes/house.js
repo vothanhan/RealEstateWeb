@@ -384,10 +384,17 @@ router.get('/average', (req,res) => {
             res.json(response)
         }
         else{
+            var key=''
+            if(params.location == '' ){
+                key = 'province';
+            }
+            else{
+                key = 'county';
+            }
             var countyList= {};
             var countyAtt = {};
             for( var i =0;i < houses.length;i++){
-                county=houses[i]['location']['county']
+                county=houses[i]['location'][key]
 
                 if(!countyList.hasOwnProperty(county)){
                     countyAtt[county]={"mean":houses[i]['price']}

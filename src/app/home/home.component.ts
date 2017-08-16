@@ -258,6 +258,7 @@ export class HomeComponent implements OnInit {
       this.drawDistributeGraph();
     }
     else if (this.graphType == 'itemDensity' || this.graphType == "itemDensityGraph"){
+      this.drawMap(true);
       this.drawItemCountGraph();  
     }
     else if (this.graphType == 'priceAverage' ){
@@ -494,17 +495,16 @@ export class HomeComponent implements OnInit {
     let dataProviders = { };
     let province=""
     let mapName = '';
-    // if (this.map.dataProvider['map']=='vietnamHigh'){
-    //   this.map.dataProvider=this.hcmDataProviders;
-    //   this.map.validateNow();
-    // }
+    if (this.map.dataProvider['map']=='vietnamHigh'){
+      this.map.dataProvider=this.hcmDataProviders;
+      this.map.validateNow();
+    }
     dataProviders=this.map.dataProvider;
     if(this.map.dataProvider['map'] == 'hcmHigh'){
       province='ho chi minh';
       mapName = "hcmHigh";
-      dataProviders= this.hcmDataProviders;
+      // dataProviders= this.hcmDataProviders;
     }
-
     
     this.houseService.getHouse(this.menuComponent.getSelected(), province, "", '', this.menuComponent.transType,
       this.menuComponent.startDate,this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 2)
@@ -513,6 +513,7 @@ export class HomeComponent implements OnInit {
           return;
         }
         else{
+          console.log(res);
           for(var i = 0 ; i < dataProviders['areas'].length;i++){
             let county=dataProviders['areas'][i]['title'].toLowerCase();
             let countyData=res['data'][county];
