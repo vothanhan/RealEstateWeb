@@ -129,7 +129,6 @@ export class HomeComponent implements OnInit {
       {
         switch(this.previous_id){
       case "itemDensity": {
-        console.log("FUCK YEAH");
         this.itemDensity = "un_clicked";
         break;
       }
@@ -400,7 +399,7 @@ export class HomeComponent implements OnInit {
     if (vm.graphType == 'itemDensityGraph'){
       this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, 
         this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,
-        this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 5)
+        this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.getProjectSelected(), 5)
       .subscribe( res => {
         let dataProvider=res['data'];
         dataProvider.forEach((item) => {
@@ -461,7 +460,7 @@ export class HomeComponent implements OnInit {
       }
       this.houseService.getHouse(this.menuComponent.getSelected(), province, 
         this.menuComponent.county, '', this.menuComponent.transType,this.menuComponent.startDate,
-        this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(), this.menuComponent.project, 5)
+        this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(), this.menuComponent.getProjectSelected(), 5)
       .subscribe( res => {
         if(res['err']==true){
           return
@@ -507,13 +506,12 @@ export class HomeComponent implements OnInit {
     }
     
     this.houseService.getHouse(this.menuComponent.getSelected(), province, "", '', this.menuComponent.transType,
-      this.menuComponent.startDate,this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 2)
+      this.menuComponent.startDate,this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(),this.menuComponent.getProjectSelected(), 2)
       .subscribe( res => {
         if (res['err']==true){
           return;
         }
         else{
-          console.log(res);
           for(var i = 0 ; i < dataProviders['areas'].length;i++){
             let county=dataProviders['areas'][i]['title'].toLowerCase();
             let countyData=res['data'][county];
@@ -589,7 +587,7 @@ export class HomeComponent implements OnInit {
   drawDistributeGraph(){
     this.houseService.getHouse(this.menuComponent.getSelected(),this.menuComponent.province, this.menuComponent.county, 
       this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,
-      this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 0).subscribe( res => {
+      this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(),this.menuComponent.getProjectSelected(), 0).subscribe( res => {
         let priceDist : number[] =[];
         let min: number = res['data'].length > 0 ? res['data'][0]['price'] : 0 , max : number = 0;
         for(let i in res['data']){
@@ -724,8 +722,6 @@ export class HomeComponent implements OnInit {
     }
     else if(this.graphType=="predictPrice"){
       let predict=[MaxY[0]];
-      console.log(MaxY[1]/2);
-      console.log(MaxY[1]-lastMax[1]);
       if((MaxY[1]-lastMax[1])<(MaxY[1])/2){
         predict.push(lastMax[0]);
       }
@@ -801,7 +797,7 @@ export class HomeComponent implements OnInit {
     let vm = this;
 
     this.houseService.getHouse(this.menuComponent.getSelected(), province, '', '', this.menuComponent.transType,
-      this.menuComponent.startDate,this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 2)
+      this.menuComponent.startDate,this.menuComponent.endDate, this.menuComponent.getWebsiteSelected(),this.menuComponent.getProjectSelected(), 2)
           .subscribe( res => {
             if (res['err']==true){
               return;
@@ -841,7 +837,8 @@ export class HomeComponent implements OnInit {
                           "lineColor":"#FF0000",
                           "above" : true,
                           "lineThickness":4,
-                          "value": totalMean/(countyList.length-zeroCount)
+                          "value": totalMean/(countyList.length-zeroCount),
+                          "balloonText": "Mean price: "+ Math.round(totalMean/(countyList.length-zeroCount)) +" VND"
                       },
                       {
                           "inside": true,
@@ -849,7 +846,8 @@ export class HomeComponent implements OnInit {
                           "lineColor":"#3EDB25",
                           "lineThickness":2,
                           "lineAlpha": 1,
-                          "value": totalMedian/(countyList.length-zeroCount)
+                          "value": totalMedian/(countyList.length-zeroCount),
+                          "balloonText": "Median price: "+ Math.round(totalMedian/(countyList.length-zeroCount)) +" VND"
                       }],
                   }],
                   "legend": {
@@ -857,11 +855,11 @@ export class HomeComponent implements OnInit {
                     "data":[
                       {
                         "title": "Mean",
-                        "color": "#FF0000"
+                        "color": "#67B7DC"
                       },
                       {
                         "title": "Median",
-                        "color": "#3EDB25"
+                        "color": "#FDD400"
                       }
                     ],
                     "position": "top",
@@ -978,7 +976,7 @@ export class HomeComponent implements OnInit {
 
     this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, this.menuComponent.county, 
       this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,
-      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 6)
+      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.getProjectSelected(), 6)
     .subscribe( res => {
       if(res['err']==true){
         return;
@@ -1116,7 +1114,7 @@ export class HomeComponent implements OnInit {
   drawHouseTypePieChart(){
     this.houseService.getHouse(this.menuComponent.getSelected(), this.menuComponent.province, this.menuComponent.county, 
       this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,
-      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 3)
+      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.getProjectSelected(), 3)
       .subscribe( res =>{
         if(res['err']==true){
           console.log("error");
@@ -1185,7 +1183,7 @@ export class HomeComponent implements OnInit {
     let dateStep=this.menuComponent.dateStep;
     this.houseService.getHouse(this.menuComponent.getSelected(),this.menuComponent.province, this.menuComponent.county, 
       this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,
-      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 4).subscribe( res => {
+      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.getProjectSelected(), 4).subscribe( res => {
         let timeData=res['data']
         
         if (res['err']==true){
@@ -1403,7 +1401,7 @@ export class HomeComponent implements OnInit {
   drawScatterPrice(){
     this.houseService.getHouse(this.menuComponent.getSelected(),this.menuComponent.province, this.menuComponent.county, 
       this.menuComponent.ward, this.menuComponent.transType,this.menuComponent.startDate,
-      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.project, 0).subscribe( res => {
+      this.menuComponent.endDate,this.menuComponent.getWebsiteSelected(),this.menuComponent.getProjectSelected(), 0).subscribe( res => {
         if(res['err']==true){
           return;
         }

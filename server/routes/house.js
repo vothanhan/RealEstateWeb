@@ -47,6 +47,11 @@ router.get('/', (req,res) => {
     }
     if (params.project != '' && params.project != undefined){
         query.where('project').equals(params.project);
+        var project=params.project.split(';');
+        if(project.length>1){
+            project.splice(-1,1);
+        }
+        query.where('house-type').in(project);
     }
     query.select('price area');
     query.exec((err,houses) => {
@@ -99,6 +104,11 @@ router.get('/count', (req,res) => {
     }
     if (params.project != '' && params.project != undefined){
         query.where('project').equals(params.project);
+        var project=params.project.split(';');
+        if(project.length>1){
+            project.splice(-1,1);
+        }
+        query.where('house-type').in(project);
     }
     query.exec((err,count) => {
         response={}
@@ -151,7 +161,11 @@ router.get("/aggregate",(req, res) =>{
         query.push({"$match":{"transaction-type":params.transtype}});
     }
     if (params.project != '' && params.project != undefined){
-        query.push({'$match':{'project':params.project}});
+        var project=params.project.split(';');
+        if(project.length>1){
+            project.splice(-1,1);
+        }
+        query.push({"$match":{"project":{"$in":project}}});
     }
     query.push({"$group":{"_id":groupBy,"count": {"$sum": 1}}});
     House.aggregate(query,(err,house) => {
@@ -196,7 +210,11 @@ router.get("/htypepercent", (req, res) =>{
         query.push({"$match":{"transaction-type":params.transtype}});
     }
     if (params.project != '' && params.project != undefined){
-        query.push({'$match':{'project':params.project}});
+        var project=params.project.split(';');
+        if(project.length>1){
+            project.splice(-1,1);
+        }
+        query.push({"$match":{"project":{"$in":project}}});
     }
     query.push({"$group":{"_id":"$house-type","count": {"$sum": 1}}});
     House.aggregate(query,(err,house) => {
@@ -250,7 +268,11 @@ router.get('/countpost',(req,res) => {
         query.push({"$match":{"transaction-type":params.transtype}});
     }
     if (params.project != '' && params.project != undefined){
-        query.push({'$match':{'project':params.project}});
+        var project=params.project.split(';');
+        if(project.length>1){
+            project.splice(-1,1);
+        }
+        query.push({"$match":{"project":{"$in":project}}});
     }
     query.push({"$group":{"_id":groupBy,"count": {"$sum": 1}}});
     House.aggregate(query,(err,house) => {
@@ -294,7 +316,11 @@ router.get('/trendprice', (req,res) => {
         query.where('transaction-type').equals(params.transtype);
     }
     if (params.project != '' && params.project != undefined){
-        query.where('project').equals(params.project);
+        var project=params.project.split(';');
+        if(project.length>1){
+            project.splice(-1,1);
+        }
+        query.where('house-type').in(project);
     }
     query.select("post-time.date price");
     query.exec((err, houses) =>{
@@ -371,7 +397,12 @@ router.get('/average', (req,res) => {
         query.where('transaction-type').equals(params.transtype);
     }
     if (params.project != '' && params.project != undefined){
-        query.where('project').equals(params.project);
+        var project=params.project.split(';');
+        if(project.length>1){
+            project.splice(-1,1);
+        }
+        console.log(project);
+        query.where('house-type').in(project);
     }
     query.select('price location');
     query.sort('price');
@@ -384,6 +415,7 @@ router.get('/average', (req,res) => {
             res.json(response)
         }
         else{
+            console.log(houses);
             var key=''
             if(params.location == '' ){
                 key = 'province';
@@ -492,10 +524,14 @@ router.get('/countmenu', (req,res) =>{
     groupBy="$"+params.groupBy;
     if(params.province!='' && params.province!=undefined){
         query.push({"$match":{"location.province":params.province}});
-        groupBy="$location.county";
+        if(groupBy!='$project'){
+            groupBy="$location.county";
+        }
         if(params.county!='' && params.county!= undefined ){
             query.push({"$match":{"location.county":params.county}});
-            groupBy = "$location.ward";
+            if(groupBy!='$project'){
+                groupBy = "$location.ward";
+            }
         }
     }
     if (params.htype!=undefined && params.htype!=''){
@@ -524,9 +560,14 @@ router.get('/countmenu', (req,res) =>{
         query.push({"$match":{"transaction-type":params.transtype}});
     }
     if (params.project != '' && params.project != undefined){
-        query.push({'$match':{'project':params.project}});
+        var project=params.project.split(';');
+        if(project.length>1){
+            project.splice(-1,1);
+        }
+        query.push({"$match":{"project":{"$in":project}}});
     }
     query.push({"$group":{"_id":groupBy,"count": {"$sum": 1}}});
+    console.log(groupBy);
     House.aggregate(query,(err,house) => {
         if(err){
             res.json({"err":true,"data":err});

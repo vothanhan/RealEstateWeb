@@ -48,9 +48,11 @@ export class DropdownMenuComponent implements OnInit {
   hasDateStep : boolean=false;
   optionsModel: number[]=[];
   sourceModel: number[]=[];
+  projectModel: number[]=[];
   haveWebsite: boolean = false;
   myOptions: IMultiSelectOption[];
   sourceOptions: IMultiSelectOption[];
+  projectOptions: IMultiSelectOption[];
   mySettings: IMultiSelectSettings = {
   };
   haveApart: boolean;
@@ -94,6 +96,7 @@ export class DropdownMenuComponent implements OnInit {
       this.sourceOptions=websiteArr;
       this.htype = '';
       this.transTypes=[];
+      this.getCount(this.htype,this.province,this.county, this.transType,'project','projects');
       this.changeCount('all');
   }
 
@@ -151,6 +154,7 @@ export class DropdownMenuComponent implements OnInit {
 
   }
   checkApartment(){
+    this.setHasChanged(true);
     if (this.optionsModel.length == 1 && this.myOptions[this.optionsModel[0]]['name'] == 'Can ho chung cu'){
       this.haveApart = true;
     }
@@ -213,9 +217,18 @@ export class DropdownMenuComponent implements OnInit {
             data.push('ho chi minh');
           }
           else{
+            let index=0
+            let arr = [];
             res['data'].forEach((item)=>{
               data.push(item['_id']);
+              if (target == 'projects' ){
+                  arr.push({"id":index,"name":item['_id']});
+                  index+=1;
+              }
             })
+            if(target=='projects'){
+              this.projectOptions = arr;
+            }
           }
         }
       }
@@ -239,6 +252,13 @@ export class DropdownMenuComponent implements OnInit {
     let ret=''
     this.sourceModel.forEach((item)=>{
       ret+=this.sourceOptions[item]['name']+";";
+    })
+    return ret;
+  }
+  getProjectSelected(){
+    let ret=''
+    this.projectModel.forEach((item)=>{
+      ret+=this.projectOptions[item]['name']+";";
     })
     return ret;
   }
