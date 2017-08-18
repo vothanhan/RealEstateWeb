@@ -567,7 +567,6 @@ router.get('/countmenu', (req,res) =>{
         query.push({"$match":{"project":{"$in":project}}});
     }
     query.push({"$group":{"_id":groupBy,"count": {"$sum": 1}}});
-    console.log(groupBy);
     House.aggregate(query,(err,house) => {
         if(err){
             res.json({"err":true,"data":err});
