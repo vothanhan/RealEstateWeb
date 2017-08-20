@@ -516,9 +516,12 @@ export class HomeComponent implements OnInit {
           for(var i = 0 ; i < dataProviders['areas'].length;i++){
             let county=dataProviders['areas'][i]['title'].toLowerCase();
             let countyData=res['data'][county];
-            dataProviders['areas'][i]['value']=countyData['mean'];
-            dataProviders['areas'][i]['balloonText']='[[title]]: [[value]] VND';
-            dataProviders['images']=[];
+            if(countyData!= undefined){
+              dataProviders['areas'][i]['value']=countyData['mean'];
+              dataProviders['areas'][i]['balloonText']='[[title]]: [[value]] VND';
+              dataProviders['images']=[];
+            }
+            
           }
           this.map.dataProvider=dataProviders;
           this.map.validateNow();

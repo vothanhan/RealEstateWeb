@@ -401,7 +401,6 @@ router.get('/average', (req,res) => {
         if(project.length>1){
             project.splice(-1,1);
         }
-        console.log(project);
         query.where('house-type').in(project);
     }
     query.select('price location');
@@ -415,7 +414,6 @@ router.get('/average', (req,res) => {
             res.json(response)
         }
         else{
-            console.log(houses);
             var key=''
             if(params.location == '' ){
                 key = 'province';
