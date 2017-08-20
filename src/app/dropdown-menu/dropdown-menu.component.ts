@@ -41,6 +41,23 @@ export class DropdownMenuComponent implements OnInit {
     "county"   : 3,
     "ward"     : 4
   };
+  house_language = {
+        "Apartment":"Can ho chung cu",
+        "Villa":"Biet thu, dat biet thu",
+        "Townhouse":"Nha mat pho",
+        "Project lands, Row-house":"Nha lien ke, dat du an",
+        "Alleyhouse":"Nha trong ngo",
+        "Lodging house":"Nha tro, phong tro",
+        "Residental Land":"Dat tho cu",
+        "Farmland":"Dat trang trai",
+        "Restaurant, hotel":"Nha hang, khach san, nha nghi",
+        "Office":"Van phong",
+        "Premise, factory, store, kiosk, storage":"Mat bang, nha xuong, cua hang, kiot, kho",
+        "Detached house":"Nha rieng",
+        "Farmstead, resort":"Trang trai, khu nghi duong",
+        "Other":"Khac",
+        "Agricultural land":"Dat nong, lam nghiep"
+    };
   hasChanged   : boolean = false;
   graphLevel  : number = 0;
   haveHType : boolean = true;
@@ -155,7 +172,7 @@ export class DropdownMenuComponent implements OnInit {
   }
   checkApartment(){
     this.setHasChanged(true);
-    if (this.optionsModel.length == 1 && this.myOptions[this.optionsModel[0]]['name'] == 'Can ho chung cu'){
+    if (this.optionsModel.length == 1 && this.myOptions[this.optionsModel[0]]['name'] == 'Apartment'){
       this.haveApart = true;
     }
     else{
@@ -242,6 +259,13 @@ export class DropdownMenuComponent implements OnInit {
     });
   }
   getSelected(){
+    let ret=''
+    this.optionsModel.forEach((item)=>{
+      ret+=this.house_language[this.myOptions[item]['name']]+";";
+    })
+    return ret;
+  }
+  getSelectedEng(){
     let ret=''
     this.optionsModel.forEach((item)=>{
       ret+=this.myOptions[item]['name']+";";

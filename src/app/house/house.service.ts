@@ -9,7 +9,7 @@ import { House } from './house';
 
 @Injectable()
 export class HouseService {
-
+  
   constructor(private http: Http) { };
 
 
@@ -54,6 +54,7 @@ export class HouseService {
       }
 
       return this.http.get('/api/house'+apiName+qmark+hv+tv+pv+cv+wv+sd+ed+we+pr).map((response: Response) =>{
+        console.log(response);
           return response.json()
       }).catch(this.handleError)
   }

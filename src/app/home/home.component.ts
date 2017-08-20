@@ -93,7 +93,7 @@ export class HomeComponent implements OnInit {
     "itemDensityGraph":1,
     "priceProb": 0,
     "itemDensity": 2,
-    "priceAverage":1,
+    "priceAverage":2,
     "meanPrice": 1,
     "postPerDay": 0,
     "hTypePercent":0,
@@ -303,7 +303,6 @@ export class HomeComponent implements OnInit {
     this.menuComponent.haveWebsite=false;
     this.isNotPredict= this.graphType != "predictPrice";
     this.menuComponent.setLevel(this.graphLevel[this.graphType]);
-    this.createGraphTitle();
     if(this.graphType == 'hTypePercent'){
       this.menuComponent.haveHType = false;
     }
@@ -323,6 +322,17 @@ export class HomeComponent implements OnInit {
   }
   toTitleCase(val){
     let value= val.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    let temp = value.split(" ");
+    if (temp.length == 2){
+        if(temp[0]=='Quan'){
+            temp[0]='District';
+            value = temp.join(" ");
+        }
+        if(temp[0]=='Phuong'){
+            temp[0]='Ward';
+            value = temp.join(" ");
+        }
+    }
     return value
   }
   createGraphTitle(){
@@ -374,8 +384,8 @@ export class HomeComponent implements OnInit {
         graphName = "Price Prediction of "
         break
       }
-    graphName+=this.menuComponent.getSelected().split(";").join("/");
-    if(this.menuComponent.getSelected().split(";").length>1){
+    graphName+=this.menuComponent.getSelectedEng().split(";").join("/");
+    if(this.menuComponent.getSelectedEng().split(";").length>1){
       graphName=graphName.slice(0,-1);
     }
     else{
@@ -404,7 +414,7 @@ export class HomeComponent implements OnInit {
       .subscribe( res => {
         let dataProvider=res['data'];
         dataProvider.forEach((item) => {
-          item['_id']=item['_id'].replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})
+          item['_id']=this.toTitleCase(item['_id']);
         })
         dataProvider.sort((a,b) => {
           return a['count']-b['count'];
@@ -521,7 +531,6 @@ export class HomeComponent implements OnInit {
               dataProviders['areas'][i]['balloonText']='[[title]]: [[value]] VND';
               dataProviders['images']=[];
             }
-            
           }
           this.map.dataProvider=dataProviders;
           this.map.validateNow();
@@ -697,10 +706,17 @@ export class HomeComponent implements OnInit {
           .attr("x", width)
           .attr("y", -30)
           .style("text-anchor", "end")
-          .text("Price")
+          .text("Price: /m2");
+        
       svg.append("g")
           .attr("class", "y axis")
-          .call(yAxis);
+          .call(yAxis)
+        .append("text")
+          .attr("class", "label")
+          .attr("x", 20)
+          .attr("y", 5)
+          .style("text-anchor", "end")
+          .text("Percentage");;
       // draw the histogram and kernel density plot 
         // calculate the number of histogram bins
       
@@ -786,7 +802,7 @@ export class HomeComponent implements OnInit {
     var layout = {
       bargap: 0.05, 
       barmode: "overlay", 
-      xaxis: {title: "Price"}, 
+      xaxis: {title: "Price: /m2"}, 
       yaxis: {title: "Count"}
     }
     Plotly.newPlot('chartdiv', data,layout);
@@ -811,9 +827,9 @@ export class HomeComponent implements OnInit {
             for(let i=0;i<countyList.length;i++){
 
               let county=countyList[i];
+              let countyEng = this.toTitleCase(county);
 
-
-              dataProvider.push({"county": county,"mean" : res['data'][county]['mean'],"median" : res['data'][county]['median'],
+              dataProvider.push({"county": countyEng,"mean" : res['data'][county]['mean'],"median" : res['data'][county]['median'],
                 "firstQuartile":res['data'][county]['firstQuartile'],"thirdQuartile" : res['data'][county]['thirdQuartile'],
                 "minimum": res['data'][county]['minimum'], "maximum" : res['data'][county]['maximum']});
               if (res['data'][county]['mean']==0 || res['data'][county]['mean']==null){
@@ -834,7 +850,7 @@ export class HomeComponent implements OnInit {
                   "valueAxes": [{
                       "unit": "VND",
                       "position": "left",
-                      "title": "Price",
+                      "title": "Price: /m2",
                       "guides": [{
                           "inside": true,
                           "lineAlpha": 1,
@@ -872,14 +888,14 @@ export class HomeComponent implements OnInit {
                   },
                   "startDuration": 1,
                   "graphs": [{
-                      "balloonText": "Mean price in [[category]]: <b>[[value]]</b>",
+                      "balloonText": "Mean price in [[category]]: <b>[[value]]</b> VND",
                       "fillAlphas": 0.9,
                       "lineAlpha": 0.2,
                       "title": "Mean",
                       "type": "column",
                       "valueField": "mean"
                   }, {
-                      "balloonText": "Median price in [[category]]: <b>[[value]]</b>",
+                      "balloonText": "Median price in [[category]]: <b>[[value]]</b> VND",
                       "fillAlphas": 0.9,
                       "lineAlpha": 0.2,
                       "title": "Median",
@@ -909,7 +925,7 @@ export class HomeComponent implements OnInit {
                 "graphs": [ {
                   "id": "g1",
                   "proCandlesticks": true,
-                  "balloonText": "1<sup>st</sup> Quartile:<b>[[firstQuartile]]</b><br>3<sup>rd</sup> Quartile:<b>[[thirdQuartile]]</b><br>Minimum:<b>[[minimum]]</b><br>Maximum:<b>[[maximum]]</b><br>",
+                  "balloonText": "1<sup>st</sup> Quartile:<b>[[firstQuartile]] VND</b><br>3<sup>rd</sup> Quartile:<b>[[thirdQuartile]] VND</b><br>Minimum:<b>[[minimum]]</b> VND<br>Maximum:<b>[[maximum]]</b> VND<br>",
                   "closeField": "thirdQuartile",
                   "fillColors": "#db4c3c",
                   "highField": "maximum",
@@ -917,7 +933,7 @@ export class HomeComponent implements OnInit {
                   "lineAlpha": 1,
                   "lowField": "minimum",
                   "openField": "firstQuartile",
-                  "title": "Price:",
+                  "title": "Price: /m2",
                   "type": "candlestick",
                   "valueField": "thirdQuartile",
                   "columnWidth":0.7
@@ -1005,7 +1021,8 @@ export class HomeComponent implements OnInit {
               "axisAlpha": 0,
               "position": "left",
               "ignoreAxisWidth":true,
-              "baseValue":5000
+              "baseValue":5000,
+              "title":"Count: listings"
           }],
           "balloon": {
               "borderThickness": 1,
@@ -1268,13 +1285,15 @@ export class HomeComponent implements OnInit {
                 "axisColor": "#FF6600",
                 "axisThickness": 2,
                 "axisAlpha": 1,
-                "position": "left"
+                "position": "left",
+                "title":"Price: /m2"
             }, {
                 "id":"v2",
                 "axisColor": "#FCD202",
                 "axisThickness": 2,
                 "axisAlpha": 1,
-                "position": "right"
+                "position": "right",
+                "title":"Count: listings"
             }],
           "balloon": {
               "borderThickness": 1,
@@ -1287,7 +1306,7 @@ export class HomeComponent implements OnInit {
                 "bulletBorderThickness": 1,
                 "hideBulletsCount": 30,
                 "title": "Average price",
-                "balloonText":"Mean:[[value]]",
+                "balloonText":"Mean:[[value]] VND",
                 "valueField": "total",
             "fillAlphas": 0
             },{
@@ -1297,7 +1316,7 @@ export class HomeComponent implements OnInit {
                 "bulletBorderThickness": 1,
                 "hideBulletsCount": 30,
                 "title": "First quartile",
-                "balloonText":"First Quartile: [[value]]",
+                "balloonText":"First Quartile: [[value]] VND",
                 "valueField": "firstQuartile",
             "fillAlphas": 0
             },{
@@ -1307,7 +1326,7 @@ export class HomeComponent implements OnInit {
                 "bulletBorderThickness": 1,
                 "hideBulletsCount": 30,
                 "title": "Third Quartile",
-                "balloonText":"Third Quartile: [[value]]",
+                "balloonText":"Third Quartile: [[value]] VND",
                 "valueField": "thirdQuartile",
             "fillAlphas": 0
             },{
@@ -1317,7 +1336,7 @@ export class HomeComponent implements OnInit {
                 "bulletBorderThickness": 1,
                 "hideBulletsCount": 30,
                 "title": "Median",
-                "balloonText":"Median: [[value]]",
+                "balloonText":"Median: [[value]] VND",
                 "valueField": "median",
             "fillAlphas": 0
             }, {
