@@ -33,6 +33,7 @@ export class HomeComponent implements OnInit {
   priceTrend: string;
   predictPrice: string;
   graphType : string ;
+  priceScatter: string;
   countyIDDict : object = {
     "Hoc Mon": "HCM-0",
     "Quan 12": "HCM-1",
@@ -138,43 +139,38 @@ export class HomeComponent implements OnInit {
       }
       case "priceDistribute": {
         this.priceDistribute = "un_clicked";
-       
         break;
       }
       case "priceProb": {
         this.priceProb = "un_clicked"
-
         break;
       }
       case "meanPrice": {
-        this.meanPrice = "un_clicked"
-             
+        this.meanPrice = "un_clicked"  
         break;
       }
       case "boxPlotPrice": {
         this.boxPlotPrice = "un_clicked"
-          
         break;
       }
       case "postPerDay": {
         this.postPerDay = "un_clicked"
- 
         break;
       }
       case "hTypePercent": {
         this.hTypePercent = "un_clicked"
-    
         break;
       }
       case "priceTrend": {
         this.priceTrend = "un_clicked"
-      
         break;
       }
       case "predictPrice": {
         this.predictPrice = "un_clicked"
-     
         break;
+      }
+      case "priceScatter": {
+        this.priceScatter = "un_clicked"
       }
     }
       }
@@ -237,6 +233,11 @@ export class HomeComponent implements OnInit {
       }
       case "predictPrice": {
         this.predictPrice = "clicked"
+        this.previous_id = id;
+        break;
+      }
+      case "priceScatter": {
+        this.priceScatter = "clicked"
         this.previous_id = id;
         break;
       }
