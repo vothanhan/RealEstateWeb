@@ -22,7 +22,7 @@ declare var science : any;
 export class HomeComponent implements OnInit {
   chartHeight: string;
   previous_id: string = "no";
-  itemDensity: string;
+  priceAverage: string;
   itemDensityGraph: string;
   priceDistribute: string;
   priceProb: string;
@@ -129,8 +129,8 @@ export class HomeComponent implements OnInit {
     if (this.previous_id != "no")
       {
         switch(this.previous_id){
-      case "itemDensity": {
-        this.itemDensity = "un_clicked";
+      case "priceAverage": {
+        this.priceAverage = "un_clicked";
         break;
       }
       case "itemDensityGraph": {
@@ -177,14 +177,14 @@ export class HomeComponent implements OnInit {
 
 
     switch(id){
-      case "itemDensity": {
+      case "priceAverage": {
         this.chartHeight = "65vh";
-        this.itemDensity = "clicked";
+        this.priceAverage = "clicked";
         this.previous_id = id;
         break;
       }
       case "itemDensityGraph": {
-           this.chartHeight = "65vh";
+        this.chartHeight = "65vh";
         this.itemDensityGraph = "clicked"
         this.previous_id = id;
         break;

@@ -1,3 +1,18 @@
+@font-face {
+  font-family: aquaFont;
+  src: url("/assets/fonts/aqua.ttf")
+}
+
+@font-face {
+  font-family: Noir_medium;
+  src: url("/assets/fonts/Noir_medium.otf")
+}
+
+@font-face {
+  font-family: Noir_regular;
+  src: url("/assets/fonts/Noir_regular.otf")
+}
+
 #graphMenu {
 display: block;
 }
@@ -161,4 +176,19 @@ div.graphDescription{
 
 .graphItem{
   font-size:1.5rem;
+}
+
+#textDiv {
+  text-align: center;
+  font-family: Noir_medium;
+  font-size: 25px;
+  margin-top: 5%;
+}
+
+div.prediction{
+  background-image: url("/assets/images/background.png");
+  background-repeat:   no-repeat;
+  background-position: center center;    
+  height: 50vh;
+  color: #696464;
 }

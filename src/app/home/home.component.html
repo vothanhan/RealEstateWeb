@@ -2,17 +2,14 @@
     <div class="row">
 
     <div class="scrollmenu">    
-        <div class="col-sm-1" id="itemDensity" (click)="chooseGraph('itemDensity')" [ngClass]="itemDensity">
-                <img src="assets/images/graph-1.png">
-                <div class="graphName"> Listing Distribution</div>
-        </div>
+       
         <div class="col-sm-1" id="itemDensityGraph" (click)="chooseGraph('itemDensityGraph')" [ngClass]="itemDensityGraph">
                 <img src="assets/images/graph-2.png">
                 <div class="graphName"> Listing Distribution</div>
         </div>
         <div class="col-sm-1" id="priceAverage" (click)="chooseGraph('priceAverage')" [ngClass]="priceAverage">
-                <img src="assets/images/graph-3.png">
-                <div class="graphName"> Price Average</div>
+                <img src="assets/images/graph-1.png">
+                <div class="graphName"> Average Price </div>
         </div>
         <div class="col-sm-1" id="priceDistribute" (click)="chooseGraph('priceDistribute')" [ngClass]="priceDistribute">
                 <img src="assets/images/graph-3.png">
@@ -63,5 +60,7 @@
         </div>
 
     <div id="chartdiv" [ngClass]="{'isLong':isLong}" *ngIf="isNotPredict" [style.height]="chartHeight"></div>
-    <div id="textDiv" *ngIf="!isNotPredict">{{predictInfo}}</div>
+   <div class="prediction">
+        <div id="textDiv" *ngIf="!isNotPredict">{{predictInfo}}</div>
+   </div>
 </div>
